@@ -19,4 +19,12 @@ class Member extends Model
     public function feedbacks() {
         return $this->hasMany(Feedback::class);
     }
+    
+    public function booking() {
+        return $this->hasMany(Booking::class);
+    }
+    
+    public function division() {
+        return $this->belongsTo(Division::class);
+    }
 }

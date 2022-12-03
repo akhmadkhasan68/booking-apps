@@ -43,10 +43,10 @@ class User extends Authenticatable
     ];
 
     public function member() {
-        return $this->hasMany(Member::class);
+        return $this->hasOne(Member::class);
     }
     
     public function admin() {
-        return $this->hasMany(Admin::class);
+        return $this->hasOne(Admin::class);
     }
 }
