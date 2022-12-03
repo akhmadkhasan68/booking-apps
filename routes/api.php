@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\Auth\AuthController;
+use App\Http\Controllers\Api\Room\RoomController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -26,5 +27,11 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
     Route::group(['prefix' => 'auth'], function() {
         Route::get('user', [AuthController::class, 'user']);
         Route::post('logout', [AuthController::class, 'logout']);
+    });
+    
+    Route::group(['prefix' => 'rooms'], function() {
+        Route::get('', [RoomController::class, 'all']);
+        Route::get('paginate', [RoomController::class, 'paginate']);
+        Route::get('/{id}', [RoomController::class, 'detail']);
     });
 });
