@@ -30,8 +30,7 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
     });
     
     Route::group(['prefix' => 'rooms'], function() {
-        Route::get('', [RoomController::class, 'all']);
-        Route::get('paginate', [RoomController::class, 'paginate']);
+        Route::get('', [RoomController::class, 'paginate']);
         Route::get('/{id}', [RoomController::class, 'detail']);
     });
 });

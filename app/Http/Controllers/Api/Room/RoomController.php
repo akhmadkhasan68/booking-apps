@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Room;
 
 use App\Http\Controllers\Controller;
 use App\Http\Repositories\RoomRepository;
+use App\Http\Requests\PaginateRequest;
 use Illuminate\Http\Request;
 
 class RoomController extends Controller
@@ -14,15 +15,9 @@ class RoomController extends Controller
     {
         $this->roomReposiory = $roomReposiory;
     }
-
-    public function all() {
-        $data = $this->roomReposiory->all();
-
-        return response($data);
-    }
     
-    public function paginate() {
-        $data = $this->roomReposiory->paginate();
+    public function paginate(PaginateRequest $request) {
+        $data = $this->roomReposiory->paginate($request);
 
         return response($data);
     }
