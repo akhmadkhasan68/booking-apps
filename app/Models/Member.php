@@ -1,0 +1,22 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+class Member extends Model
+{
+    use HasFactory, SoftDeletes;
+
+    protected $guarded = [];
+
+    public function user() {
+        return $this->belongsTo(Admin::class);
+    }
+    
+    public function feedbacks() {
+        return $this->hasMany(Feedback::class);
+    }
+}
