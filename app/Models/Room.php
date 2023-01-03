@@ -21,6 +21,6 @@ class Room extends Model
     }
 
     public function facilities() {
-        return $this->morphToMany(Facility::class, 'room_facilities');
+        return $this->hasMany(RoomFacility::class, 'room_id', 'id');
     }
 }

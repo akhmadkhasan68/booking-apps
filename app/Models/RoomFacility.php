@@ -12,4 +12,14 @@ class RoomFacility extends Model
     protected $table = 'room_facilities';
     
     protected $guarded = [];
+
+    protected $with = ['facility'];
+
+    public function facility() {
+        return $this->belongsTo(Facility::class);
+    }
+    
+    public function room() {
+        return $this->belongsTo(Room::class);
+    }
 }

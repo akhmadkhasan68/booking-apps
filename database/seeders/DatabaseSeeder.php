@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\RoomFacility;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -17,7 +18,10 @@ class DatabaseSeeder extends Seeder
         $this->call([
             DivisionSeeder::class,
             UserAdminSeeder::class,
-            UserMemberSeeder::class
+            UserMemberSeeder::class,
+            FacilitySeeder::class,
+            RoomSeeder::class,
+            RoomFacility::class
         ]);
     }
 }
