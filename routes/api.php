@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Api\Auth\AuthController;
+use App\Http\Controllers\Api\Booking\BookingController;
+use App\Http\Controllers\Api\Room\RoomController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -27,4 +29,16 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
         Route::get('user', [AuthController::class, 'user']);
         Route::post('logout', [AuthController::class, 'logout']);
     });
+    
+    Route::group(['prefix' => 'rooms'], function() {
+        Route::get('', [RoomController::class, 'paginate']);
+        Route::post('/search-available', [RoomController::class, 'searchAvailable']);
+        Route::get('/{id}', [RoomController::class, 'detail']);
+    });
+    
+    Route::group(['prefix' => 'booking'], function() {
+        Route::post('/', [BookingController::class, 'booking']);
+    });
+
+
 });

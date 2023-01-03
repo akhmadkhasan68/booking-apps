@@ -2,6 +2,7 @@
 namespace App\Http\Services;
 
 use App\Constants\RolesConstant;
+use App\Http\Repositories\AdminRepository;
 use App\Http\Repositories\MemberRepository;
 use App\Http\Repositories\UserRepository;
 use App\Http\Requests\Auth\LoginRequest;
@@ -16,11 +17,13 @@ use Illuminate\Support\Facades\Hash;
 class AuthApiService {
   protected $userRepository;
   protected $memberRepository;
+  protected $adminRepository;
 
   public function __construct()
   {
     $this->userRepository = new UserRepository();
     $this->memberRepository = new MemberRepository();
+    $this->adminRepository = new AdminRepository();
   }
 
   public function user(Request $request) {
@@ -32,6 +35,7 @@ class AuthApiService {
       throw $e;
     }
   }
+
   public function login(LoginRequest $request) {
     try {
       $user = $this->userRepository->findOne(['email' => $request->email]);
@@ -57,22 +61,21 @@ class AuthApiService {
     }
   }
 
-  public function register(RegisterRequest $request) {
+  public function register(RegisterRequest $request, $role) {
     try {
       $request['password'] = Hash::make($request['password']);
-      $request['roles'] = RolesConstant::MEMBER;
+      $request['roles'] = $role;
 
       DB::beginTransaction();
 
       $user = $this->userRepository->create($request->toArray());
-      $this->memberRepository->create([
-        'user_id' => $user->id,
-        'division_id' => $request->division_id,
-        'name' => $request->name,
-        'gender' => $request->gender,
-        'address' => $request->address,
-        'nip' => $request->nip,
-      ]);
+
+      if($role == RolesConstant::MEMBER) {
+        $this->loginAsMember($user, $request);
+      } else if($role == RolesConstant::ADMIN) {
+        $this->loginAsAdmin($user, $request);
+      }
+
       $token = $user->createToken('Access Token')->plainTextToken;
       
       DB::commit();
@@ -85,6 +88,39 @@ class AuthApiService {
       ];
 
       return $response;
+    } catch (\Exception $e) {
+      DB::rollBack();
+
+      throw $e;
+    }
+  }
+
+  private function loginAsMember($user, RegisterRequest $request) {
+    try {
+      return $this->memberRepository->create([
+        'user_id' => $user->id,
+        'division_id' => $request->division_id,
+        'name' => $request->name,
+        'gender' => $request->gender,
+        'address' => $request->address,
+        'nip' => $request->nip,
+      ]);
+    } catch (\Exception $e) {
+      DB::rollBack();
+
+      throw $e;
+    }
+  }
+  
+  private function loginAsAdmin($user, RegisterRequest $request) {
+    try {
+      return $this->adminRepository->create([
+        'user_id' => $user->id,
+        'name' => $request->name,
+        'gender' => $request->gender,
+        'address' => $request->address,
+        'nip' => $request->nip,
+      ]);
     } catch (\Exception $e) {
       DB::rollBack();
 

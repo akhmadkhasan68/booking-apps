@@ -10,6 +10,7 @@ class Feedback extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $table = 'feedbacks';
     protected $guarded = [];
 
     public function member() {
