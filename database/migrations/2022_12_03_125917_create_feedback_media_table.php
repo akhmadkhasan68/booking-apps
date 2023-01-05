@@ -15,7 +15,7 @@ class CreateFeedbackMediaTable extends Migration
     {
         Schema::create('feedback_medias', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('feedback_id')->constrained('feedbacks');
+            $table->integer('feedback_id');
             $table->string('attachment');
             $table->timestamps();
             $table->softDeletes();

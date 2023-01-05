@@ -15,7 +15,7 @@ class CreateTableAdmins extends Migration
     {
         Schema::create('admins', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained();
+            $table->integer('user_id');
             $table->string('name');
             $table->enum('gender', ['MALE', 'FEMALE']);
             $table->longText('address');
