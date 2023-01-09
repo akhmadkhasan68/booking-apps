@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Feedback;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class FeedbackRequest extends FormRequest
 {
@@ -13,7 +14,7 @@ class FeedbackRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +25,14 @@ class FeedbackRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'room_id' => [
+                'required',
+                'numeric',
+                Rule::exists('rooms', 'id')
+            ],
+            'description' => 'required',
+            'medias' => 'required',
+            'medias.*' => 'required|mimes:jpg,png,jpeg|max:2048'
         ];
     }
 }
