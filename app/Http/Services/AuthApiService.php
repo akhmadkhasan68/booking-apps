@@ -7,10 +7,12 @@ use App\Http\Repositories\MemberRepository;
 use App\Http\Repositories\UserRepository;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
+use App\Http\Requests\Auth\UpdateProfileRequest;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
@@ -71,9 +73,9 @@ class AuthApiService {
       $user = $this->userRepository->create($request->toArray());
 
       if($role == RolesConstant::MEMBER) {
-        $this->loginAsMember($user, $request);
+        $this->registerAsMember($user, $request);
       } else if($role == RolesConstant::ADMIN) {
-        $this->loginAsAdmin($user, $request);
+        $this->registerAsAdmin($user, $request);
       }
 
       $token = $user->createToken('Access Token')->plainTextToken;
@@ -95,7 +97,7 @@ class AuthApiService {
     }
   }
 
-  private function loginAsMember($user, RegisterRequest $request) {
+  private function registerAsMember($user, RegisterRequest $request) {
     try {
       return $this->memberRepository->create([
         'user_id' => $user->id,
@@ -106,13 +108,11 @@ class AuthApiService {
         'nip' => $request->nip,
       ]);
     } catch (\Exception $e) {
-      DB::rollBack();
-
       throw $e;
     }
   }
   
-  private function loginAsAdmin($user, RegisterRequest $request) {
+  private function registerAsAdmin($user, RegisterRequest $request) {
     try {
       return $this->adminRepository->create([
         'user_id' => $user->id,
@@ -121,6 +121,35 @@ class AuthApiService {
         'address' => $request->address,
         'nip' => $request->nip,
       ]);
+    } catch (\Exception $e) {
+      throw $e;
+    }
+  }
+
+  public function updateMemberProfile(UpdateProfileRequest $request) {
+    try {
+      DB::beginTransaction();
+
+      $this->memberRepository->update([
+        'id' => Auth::user()->member->id
+      ], [
+        'name' => $request->name,
+        'division_id' => $request->division_id,
+        'gender' => $request->gender,
+        'address' => $request->address,
+        'nip' => $request->nip,
+      ]);
+
+      $this->userRepository->update([
+        'id' => Auth::user()->id
+      ], [
+        'name' => $request->name,
+        'phone' => $request->phone
+      ]);
+
+      DB::commit();
+
+      return $this->memberRepository->findOne(['id' => Auth::user()->member->id]);
     } catch (\Exception $e) {
       DB::rollBack();
 
