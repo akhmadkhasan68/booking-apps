@@ -46,7 +46,8 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
     });
     
     Route::group(['prefix' => 'feedbacks'], function() {
-        Route::get('/{id}', [FeedbackController::class, 'feedbackByRoom']);
+        Route::get('/', [FeedbackController::class, 'feedbacks']);
+        Route::get('/{id}', [FeedbackController::class, 'feedbackDetail']);
         Route::post('/', [FeedbackController::class, 'create']);
     });
     

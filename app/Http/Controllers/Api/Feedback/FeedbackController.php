@@ -17,9 +17,23 @@ class FeedbackController extends Controller
         $this->feedbackRepository = $feedbackRepository;
     }
 
-    public function feedbackByRoom(PaginateRequest $request, $id) {
+    public function feedbacks(PaginateRequest $request) {
         try {
-            return $request;
+            $data = $this->feedbackRepository->feedbacksPaginate($request);
+            
+            return $data;
+        } catch (\Exception $e) {
+            return response([
+                'message' => $e->getMessage(),
+            ]);
+        }
+    }
+    
+    public function feedbackDetail($id) {
+        try {
+            $data = $this->feedbackRepository->findOneOrFail(['id' => $id]);
+            
+            return $data;
         } catch (\Exception $e) {
             return response([
                 'message' => $e->getMessage(),
@@ -30,7 +44,7 @@ class FeedbackController extends Controller
     public function create(FeedbackRequest $request) {
         try {
             $data = $this->feedbackRepository->create($request);
-            
+
             return $data;
         } catch (\Exception $e) {
             return response([
