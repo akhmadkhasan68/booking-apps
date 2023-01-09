@@ -26,7 +26,7 @@ class AuthApiService {
     $this->adminRepository = new AdminRepository();
   }
 
-  public function user(Request $request) {
+  public function me(Request $request) {
     try {
       $user = $this->userRepository->findOne(['id' => $request->user()->id]);
 

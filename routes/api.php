@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\Booking\BookingController;
+use App\Http\Controllers\Api\Feedback\FeedbackController;
+use App\Http\Controllers\Api\Profile\ProfileController;
 use App\Http\Controllers\Api\Room\RoomController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -26,7 +28,7 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
 
 Route::group(['middleware' => 'auth:sanctum'], function() {
     Route::group(['prefix' => 'auth'], function() {
-        Route::get('user', [AuthController::class, 'user']);
+        Route::get('me', [AuthController::class, 'user']);
         Route::post('logout', [AuthController::class, 'logout']);
     });
     
@@ -39,8 +41,17 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
     });
     
     Route::group(['prefix' => 'booking'], function() {
+        Route::get('/', [BookingController::class, 'getAllBooking']);
         Route::post('/', [BookingController::class, 'booking']);
     });
-
-
+    
+    Route::group(['prefix' => 'feedbacks'], function() {
+        Route::get('/{id}', [FeedbackController::class, 'feedbackByRoom']);
+        Route::post('/', [FeedbackController::class, 'create']);
+    });
+    
+    Route::group(['prefix' => 'profile'], function() {
+        Route::put('/photo', [ProfileController::class, 'updatePhoto']);
+        Route::put('/', [ProfileController::class, 'update']);
+    });
 });
