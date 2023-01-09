@@ -32,6 +32,8 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
     
     Route::group(['prefix' => 'rooms'], function() {
         Route::get('', [RoomController::class, 'paginate']);
+        Route::get('/schedules', [RoomController::class, 'schedules']);
+        Route::get('/schedules/{id}', [RoomController::class, 'scheduleDetail']);
         Route::post('/search-available', [RoomController::class, 'searchAvailable']);
         Route::get('/{id}', [RoomController::class, 'detail']);
     });

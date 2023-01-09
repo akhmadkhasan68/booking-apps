@@ -18,15 +18,51 @@ class RoomController extends Controller
     }
     
     public function paginate(PaginateRequest $request) {
-        $data = $this->roomRepository->paginate($request);
+        try {
+            $data = $this->roomRepository->paginate($request);
 
-        return response($data);
+            return response($data);
+        } catch (\Exception $e) {
+            return response([
+                'message' => $e->getMessage(),
+            ], $e->getCode());
+        }
     }
     
     public function searchAvailable(SearchAvailableRequest $request) {
-        $data = $this->roomRepository->searchAvailable($request);
+        try {
+            $data = $this->roomRepository->searchAvailable($request);
 
-        return response($data);
+            return response($data);
+        } catch (\Exception $e) {
+            return response([
+                'message' => $e->getMessage(),
+            ], $e->getCode());
+        }
+    }
+
+    public function schedules(PaginateRequest $request) {
+        try {
+            $data = $this->roomRepository->schedules($request);
+
+            return $data;
+        } catch (\Exception $e) {
+            return response([
+                'message' => $e->getMessage(),
+            ], $e->getCode());
+        }
+    }
+    
+    public function scheduleDetail($id) {
+        try {
+            $data = $this->roomRepository->scheduleDetail($id);
+
+            return $data;
+        } catch (\Exception $e) {
+            return response([
+                'message' => $e->getMessage(),
+            ], $e->getCode());
+        }
     }
 
     public function detail($id) {
