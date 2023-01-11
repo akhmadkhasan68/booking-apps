@@ -10,6 +10,7 @@ class FeedbackMedia extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $table = "feedback_medias";
     protected $guarded = [];
 
     public function feedback() {

@@ -16,8 +16,8 @@ class AuthController extends Controller {
     $this->authApiService = $authApiService;
   }
 
-  public function user(Request $request) {
-    $data = $this->authApiService->user($request);
+  public function me(Request $request) {
+    $data = $this->authApiService->me($request);
 
     return response($data);
   }

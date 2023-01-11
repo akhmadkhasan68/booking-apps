@@ -18,4 +18,8 @@ class UserRepository {
   public function create($data) {
     return $this->userModel->create($data);
   }
+  
+  public function update(array $conditions, array $data) {
+    return $this->userModel->where($conditions)->update($data);
+  }
 }

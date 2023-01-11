@@ -20,4 +20,8 @@ class Feedback extends Model
     public function medias() {
         return $this->hasMany(FeedbackMedia::class);
     }
+
+    public function room() {
+        return $this->belongsTo(Room::class);
+    }
 }
