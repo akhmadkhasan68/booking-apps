@@ -28,7 +28,7 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
 
 Route::group(['middleware' => 'auth:sanctum'], function() {
     Route::group(['prefix' => 'auth'], function() {
-        Route::get('me', [AuthController::class, 'user']);
+        Route::get('me', [AuthController::class, 'me']);
         Route::post('logout', [AuthController::class, 'logout']);
     });
     

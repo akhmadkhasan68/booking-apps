@@ -8,8 +8,6 @@ use App\Http\Repositories\UserRepository;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Requests\Auth\UpdateProfileRequest;
-use Exception;
-use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -82,7 +80,7 @@ class AuthApiService {
       
       DB::commit();
 
-      $user = $this->userRepository->findOne(['id' => $request->id]);
+      $user = $this->userRepository->findOne(['id' => $user->id]);
 
       $response = [
         'user' => $user,
