@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Facility;
 use App\Models\Room;
+use App\Models\RoomFacility;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Hash;
-
+use Illuminate\Support\Facades\URL;
 
 class RoomController extends Controller
 {
@@ -29,7 +29,9 @@ class RoomController extends Controller
     public function create()
     {
         $create = new Room;
-        return view('admin.room.addroom', compact('create'));
+        $facilities = Facility::all();
+
+        return view('admin.room.addroom', compact('create', 'facilities'));
     }
 
     /**
@@ -44,25 +46,33 @@ class RoomController extends Controller
             'name'     => 'required',
             'floor'   => 'required',
             'capacity'   => 'required',
-            'facility'   => 'required',
+            'facility_id'   => 'required',
+            'quantity'   => 'required',
             'image'     => 'required|image|mimes:png,jpg,jpeg'
         ]);
     
         //upload image
         $image = $request->file('image');
-        
         $extension = $image->getClientOriginalExtension();
         $fileName = time().rand(0, 100).".".$extension;
-        // $image->move(public_path('uploads/images'), $fileName);
-        $image->storeAs('public/img', $image());
+        $image->move(public_path('uploads/images'), $fileName); 
+        $url = URL::asset('uploads/images/'.$fileName);
     
         $create = Room::create([
             'name'     => $request->name,
             'floor'   => $request->floor,
             'capacity'   => $request->capacity,
-            'facility'   => $request->facility,
-            'image'     => $image->hashName(),
+            'image'     => $url,
         ]);
+
+        $facilities = [];
+        foreach($request->facility_id as $index => $facility) {
+            $facilities[$index]['room_id'] = $create->id;
+            $facilities[$index]['facility_id'] = $facility;
+            $facilities[$index]['quantity'] = $request->quantity[$index];
+        }
+
+        RoomFacility::insert($facilities);
     
         if($create){
             //redirect dengan pesan sukses
