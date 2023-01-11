@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Feedback;
 
+use App\Helpers\ApiResponseHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Repositories\FeedbackRepository;
 use App\Http\Requests\Feedback\FeedbackRequest;
@@ -21,11 +22,9 @@ class FeedbackController extends Controller
         try {
             $data = $this->feedbackRepository->feedbacksPaginate($request);
             
-            return $data;
+            return ApiResponseHelper::successResponse("Success get data feedbacks", $data);
         } catch (\Exception $e) {
-            return response([
-                'message' => $e->getMessage(),
-            ]);
+            return ApiResponseHelper::errorResponse($e->getMessage(), $e->getCode());
         }
     }
     
@@ -33,11 +32,9 @@ class FeedbackController extends Controller
         try {
             $data = $this->feedbackRepository->findOneOrFail(['id' => $id]);
             
-            return $data;
+            return ApiResponseHelper::successResponse("Success get data feedback detail", $data);
         } catch (\Exception $e) {
-            return response([
-                'message' => $e->getMessage(),
-            ]);
+            return ApiResponseHelper::errorResponse($e->getMessage(), $e->getCode());
         }
     }
 
@@ -45,11 +42,9 @@ class FeedbackController extends Controller
         try {
             $data = $this->feedbackRepository->create($request);
 
-            return $data;
+            return ApiResponseHelper::successResponse("Success create data feedback", $data);
         } catch (\Exception $e) {
-            return response([
-                'message' => $e->getMessage(),
-            ]);
+            return ApiResponseHelper::errorResponse($e->getMessage(), $e->getCode());
         }
     }
 }

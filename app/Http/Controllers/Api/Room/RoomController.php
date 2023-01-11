@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Room;
 
+use App\Helpers\ApiResponseHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Repositories\RoomRepository;
 use App\Http\Requests\PaginateRequest;
@@ -21,47 +22,9 @@ class RoomController extends Controller
         try {
             $data = $this->roomRepository->paginate($request);
 
-            return response($data);
+            return ApiResponseHelper::successResponse("Success get data rooms", $data);
         } catch (\Exception $e) {
-            return response([
-                'message' => $e->getMessage(),
-            ], $e->getCode());
-        }
-    }
-    
-    public function searchAvailable(SearchAvailableRequest $request) {
-        try {
-            $data = $this->roomRepository->searchAvailable($request);
-
-            return response($data);
-        } catch (\Exception $e) {
-            return response([
-                'message' => $e->getMessage(),
-            ], $e->getCode());
-        }
-    }
-
-    public function schedules(PaginateRequest $request) {
-        try {
-            $data = $this->roomRepository->schedules($request);
-
-            return $data;
-        } catch (\Exception $e) {
-            return response([
-                'message' => $e->getMessage(),
-            ], $e->getCode());
-        }
-    }
-    
-    public function scheduleDetail($id) {
-        try {
-            $data = $this->roomRepository->scheduleDetail($id);
-
-            return $data;
-        } catch (\Exception $e) {
-            return response([
-                'message' => $e->getMessage(),
-            ], $e->getCode());
+            return ApiResponseHelper::errorResponse($e->getMessage(), $e->getCode());
         }
     }
 
@@ -69,11 +32,39 @@ class RoomController extends Controller
         try {
             $data = $this->roomRepository->findOneOrFail(['id' => $id]);
     
-            return response($data);
+            return ApiResponseHelper::successResponse("Success get data room detail", $data);
         } catch (\Exception $e) {
-            return response([
-                'message' => $e->getMessage(),
-            ], $e->getCode());
+            return ApiResponseHelper::errorResponse($e->getMessage(), $e->getCode());
+        }
+    }
+    
+    public function searchAvailable(SearchAvailableRequest $request) {
+        try {
+            $data = $this->roomRepository->searchAvailable($request);
+
+            return ApiResponseHelper::successResponse("Success search data room available", $data);
+        } catch (\Exception $e) {
+            return ApiResponseHelper::errorResponse($e->getMessage(), $e->getCode());
+        }
+    }
+
+    public function schedules(PaginateRequest $request) {
+        try {
+            $data = $this->roomRepository->schedules($request);
+
+            return ApiResponseHelper::successResponse("Success get data room schedules", $data);
+        } catch (\Exception $e) {
+            return ApiResponseHelper::errorResponse($e->getMessage(), $e->getCode());
+        }
+    }
+    
+    public function scheduleDetail($id) {
+        try {
+            $data = $this->roomRepository->scheduleDetail($id);
+
+            return ApiResponseHelper::successResponse("Success get data room detail", $data);
+        } catch (\Exception $e) {
+            return ApiResponseHelper::errorResponse($e->getMessage(), $e->getCode());
         }
     }
 }

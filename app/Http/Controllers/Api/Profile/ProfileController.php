@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Profile;
 
+use App\Helpers\ApiResponseHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\UpdateProfileRequest;
 use App\Http\Services\AuthApiService;
@@ -20,11 +21,9 @@ class ProfileController extends Controller
         try {
             $data = $this->authApiService->updateMemberProfile($request);
 
-            return response($data);
+            return ApiResponseHelper::successResponse("Success update profile", $data);
         } catch (\Exception $e) {
-            return response([
-                'message' => $e->getMessage(),
-            ], $e->getCode());
+            return ApiResponseHelper::errorResponse($e->getMessage(), $e->getCode());
         }
     }
 

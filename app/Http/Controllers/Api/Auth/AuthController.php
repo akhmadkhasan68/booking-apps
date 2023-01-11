@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\Api\Auth;
 
 use App\Constants\RolesConstant;
+use App\Helpers\ApiResponseHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
@@ -17,26 +18,42 @@ class AuthController extends Controller {
   }
 
   public function me(Request $request) {
-    $data = $this->authApiService->me($request);
+    try {
+      $data = $this->authApiService->me($request);
 
-    return response($data);
+      return ApiResponseHelper::successResponse("Success get data user", $data);
+    } catch (\Exception $e) {
+      return ApiResponseHelper::errorResponse($e->getMessage(), $e->getCode());
+    }
   }
 
   public function login(LoginRequest $request) {
-    $data = $this->authApiService->login($request);
+    try {
+      $data = $this->authApiService->login($request);
 
-    return response($data);
+      return ApiResponseHelper::successResponse("Success login account", $data);
+    } catch (\Exception $e) {
+      return ApiResponseHelper::errorResponse($e->getMessage(), $e->getCode());
+    }
   }
   
   public function register(RegisterRequest $request) {
-    $data = $this->authApiService->register($request, RolesConstant::MEMBER);
+    try {
+      $data = $this->authApiService->register($request, RolesConstant::MEMBER);
 
-    return response($data);
+      return ApiResponseHelper::successResponse("Success register account", $data);
+    } catch (\Exception $e) {
+      return ApiResponseHelper::errorResponse($e->getMessage(), $e->getCode());
+    }
   }
 
   public function logout (Request $request) {
-    $data = $this->authApiService->logout($request);
+    try {
+      $data = $this->authApiService->logout($request);
 
-    return response($data);
+      return ApiResponseHelper::successResponse("Success logout account", $data);
+    } catch (\Exception $e) {
+      return ApiResponseHelper::errorResponse($e->getMessage(), $e->getCode());
+    }
   }
 }

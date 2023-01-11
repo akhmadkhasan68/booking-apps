@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\Booking\BookingController;
+use App\Http\Controllers\Api\Divisions\DivisionController;
 use App\Http\Controllers\Api\Feedback\FeedbackController;
 use App\Http\Controllers\Api\Profile\ProfileController;
 use App\Http\Controllers\Api\Room\RoomController;
@@ -28,7 +29,7 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
 
 Route::group(['middleware' => 'auth:sanctum'], function() {
     Route::group(['prefix' => 'auth'], function() {
-        Route::get('me', [AuthController::class, 'user']);
+        Route::get('me', [AuthController::class, 'me']);
         Route::post('logout', [AuthController::class, 'logout']);
     });
     
@@ -55,5 +56,10 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
     Route::group(['prefix' => 'profile'], function() {
         Route::put('/photo', [ProfileController::class, 'updatePhoto']);
         Route::put('/', [ProfileController::class, 'updateMemberProfile']);
+    });
+
+    Route::group(['prefix' => 'divisions'], function() {
+        Route::get('/', [DivisionController::class, 'index']);
+        Route::get('/{id}', [DivisionController::class, 'detail']);
     });
 });

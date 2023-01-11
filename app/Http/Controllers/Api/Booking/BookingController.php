@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Booking;
 
+use App\Helpers\ApiResponseHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Repositories\BookingRepository;
 use App\Http\Requests\Booking\BookingRequest;
@@ -26,21 +27,21 @@ class BookingController extends Controller
                 'member_id' => Auth::user()->member->id
             ]);
 
-            return $this->bookingRepository->getBookingHistoryPaginate($request);
+            $data = $this->bookingRepository->getBookingHistoryPaginate($request);
+
+            return ApiResponseHelper::successResponse("Success get data bookings", $data);
         } catch (\Exception $e) {
-            return response([
-                'message' => $e->getMessage(),
-            ]);
+            return ApiResponseHelper::errorResponse($e->getMessage(), $e->getCode());
         }
     }
     
     public function getDetailBooking($id) {
         try {
-            return $this->bookingRepository->findOneOrFail(['id' => $id, 'member_id' => Auth::user()->member->id]);
+            $data = $this->bookingRepository->findOneOrFail(['id' => $id, 'member_id' => Auth::user()->member->id]);
+
+            return ApiResponseHelper::successResponse("Success get detail booking", $data);;
         } catch (\Exception $e) {
-            return response([
-                'message' => $e->getMessage(),
-            ]);
+            return ApiResponseHelper::errorResponse($e->getMessage(), $e->getCode());
         }
     }
 
@@ -48,14 +49,9 @@ class BookingController extends Controller
         try {
             $data = $this->bookingService->booking($request);
             
-            return response([
-                'message' => 'success create data booking',
-                'data' => $data
-            ]);
+            return ApiResponseHelper::successResponse("Success create booking", $data);;
         } catch (\Exception $e) {
-            return response([
-                'message' => $e->getMessage(),
-            ], 500);
+            return ApiResponseHelper::errorResponse($e->getMessage(), $e->getCode());
         }
     }
 }
