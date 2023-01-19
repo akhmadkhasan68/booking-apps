@@ -54,7 +54,7 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
     });
     
     Route::group(['prefix' => 'profile'], function() {
-        Route::put('/photo', [ProfileController::class, 'updatePhoto']);
+        Route::put('/update-photo', [ProfileController::class, 'updatePhoto']);
         Route::put('/', [ProfileController::class, 'updateMemberProfile']);
     });
 
