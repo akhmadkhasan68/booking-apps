@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function(){
-    return ApiResponseHelper::successResponse("Hello from booking apps API", []);
+    return ApiResponseHelper::successResponse("Welcome to booking apps API", []);
 });
 
 Route::group(['middleware' => ['cors', 'json.response']], function () {
