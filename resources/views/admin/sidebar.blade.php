@@ -34,7 +34,7 @@
 
     <!-- Nav Item - Utilities Collapse Menu -->
     <li class="nav-item">
-        <a class="nav-link collapsed" href="{{ URL::to('admin/room') }}" >
+        <a class="nav-link collapsed" href="{{ route('room') }}" >
             <i class="fas fa-fw fa-wrench"></i>
             <span>Room</span>
         </a>

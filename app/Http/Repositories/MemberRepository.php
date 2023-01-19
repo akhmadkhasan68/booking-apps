@@ -18,4 +18,8 @@ class MemberRepository {
   public function create($data) {
     return $this->memberModel->create($data);
   }
+  
+  public function update(array $conditions, array $data) {
+    return $this->memberModel->where($conditions)->update($data);
+  }
 }

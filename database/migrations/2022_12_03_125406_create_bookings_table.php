@@ -15,8 +15,8 @@ class CreateBookingsTable extends Migration
     {
         Schema::create('bookings', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('member_id')->constrained();
-            $table->foreignId('room_id')->constrained();
+            $table->integer('member_id');
+            $table->integer('room_id');
             $table->dateTime('booking_date');
             $table->dateTime('booking_start_date');
             $table->dateTime('booking_end_date');

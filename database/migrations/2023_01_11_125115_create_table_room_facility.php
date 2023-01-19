@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateFeedbackMediaTable extends Migration
+class CreateTableRoomFacility extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,8 @@ class CreateFeedbackMediaTable extends Migration
      */
     public function up()
     {
-        Schema::create('feedback_medias', function (Blueprint $table) {
-            $table->id();
-            $table->integer('feedback_id');
-            $table->string('attachment');
-            $table->timestamps();
-            $table->softDeletes();
+        Schema::table('rooms', function (Blueprint $table) {
+            $table->string('facility')->after('capacity');
         });
     }
 
@@ -29,6 +25,8 @@ class CreateFeedbackMediaTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('feedback_media');
+        Schema::table('rooms', function (Blueprint $table) {
+            $table->dropColumn(['facility']);
+        });
     }
 }

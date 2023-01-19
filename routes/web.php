@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BookingController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -48,3 +49,10 @@ Route::get('/admin/room/addroom', function () {
 Route::get('/admin/room/editfacility', function () {
     return view('admin/room/editfacility');
 });
+
+// Route::get('admin/room', RoomController::class);
+// Route::resource('admin/room/addroom', RoomController::class);
+
+Route::get('/admin/room', 'RoomController@index')->name('room');
+Route::get('/admin/room/addroom', 'RoomController@create')->name('addroom');
+Route::post('/admin/room/store', 'RoomController@store')->name('save');
