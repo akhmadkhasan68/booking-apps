@@ -1,5 +1,6 @@
 <?php
 
+use App\Helpers\ApiResponseHelper;
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\Booking\BookingController;
 use App\Http\Controllers\Api\Divisions\DivisionController;
@@ -19,6 +20,10 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+Route::get('/', function(){
+    return ApiResponseHelper::successResponse("Hello from booking apps API", []);
+});
 
 Route::group(['middleware' => ['cors', 'json.response']], function () {
     Route::group(['prefix' => 'auth'], function() {
