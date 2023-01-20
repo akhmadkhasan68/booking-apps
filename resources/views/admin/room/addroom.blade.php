@@ -11,38 +11,37 @@
 
         @csrf
 
-        <div>
-            <h5>Add Image</h5>
+        <div class="mt-3">
+            <label>Add Image</label><br>
             <input type="file" id="image" name="image">
         </div>
 
          <div class="mt-3">
-            <h5 class=""> Room Name</h5>
-            <input type="text" class="form-control" placeholder="Room Name" id="name" name="name">
+            <label> Room Name</label>
+            <input type="text" class="form-control col-md-10" placeholder="Room Name" id="name" name="name">
         </div>
+
         <div class="mt-3">
-            <h5>Floor</h5>
-            <select class="form-control" id="floor" name="floor"> 
+            <label>Floor</label>
+            <select class="form-control col-md-10" id="floor" name="floor"> 
                 <option selected>------ Silahkan Pilih Lantai ------</option>
                 <option value="1">Lantai 1</option>
                 <option value="2">Lantai 2</option>
                 <option value="3">Lantai 3</option>
                 <option value="4">Lantai 4</option>
-            </select>
-
-
-        </div>
+            </select></div>
 
         <div class="mt-3">
-            <h5 class="">Capacity</h5>
-            <div class="row g-0 position-relative">
-                <div class="col-md-8">
+            <label class="">Capacity</label>
+            <div class="row g-0">
+                <div class="col-md-10">
                     <input type="number" class="form-control" placeholder="Capacity" id="capacity" name="capacity">
                 </div>
         </div>
+
         <div class="mt-3">
-            <h5 class="">Facility</h5>
-            <div class="row mb-3 g-0 position-relative">
+            <label class="">Facility</label>
+            <div class="row mb-3 g-0">
                 <div class="col-md-5">
                     <select class="form-control" name="facility_id[]"> 
                         <option selected>------ Silahkan Pilih Fasilitas ------</option>
@@ -58,16 +57,18 @@
             <div id="facility-section">
 
             </div>
-            <div class="row mt-3 g-0 position-relative">
+            <div class="row mt-3 g-0">
                 <div class="col-lg-3">
                     <button class="btn btn-success" type="button" onclick="addFacility()">Add Facility</button>
                 </div>
             </div>
         </div>
     </form>
+
     <div class="w-100 text-center">
         <button type="submit" class="btn btn-primary mt-5" type="submit" value="save">Save</button>
     </div>
+    
 </div>
 
 @endsection

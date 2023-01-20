@@ -7,6 +7,7 @@ use App\Models\Room;
 use App\Models\RoomFacility;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\DB;
 
 class RoomController extends Controller
 {
@@ -17,6 +18,7 @@ class RoomController extends Controller
      */
     public function index(Request $request)
     {
+
         $datas = Room::all();
         return view('admin.room.room', compact('datas'));
     }
@@ -89,9 +91,9 @@ class RoomController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Room $room)
+    public function show($id)
     {
-        return view('room.show', compact('room'));
+        //
     }
 
     /**
@@ -100,9 +102,12 @@ class RoomController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Room $room)
+    public function edit($id)
     {
-        return view('room.edit', compact('room'));
+        $datas = Room::find($id);
+        $facilities = Facility::all();
+        // $roomfacility = RoomFacility::all();
+        return view('admin.room.editfacility', compact('datas', 'facilities'));
     }
 
     /**
@@ -112,17 +117,41 @@ class RoomController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Room $room)
+    public function update(Request $request)
     {
-        $request->validate([
-            'name' => 'required',
-            'floor' => 'required',
-            'capacity' => 'required',
+        $this->validate($request, [
+            'facility_id'   => 'required',
+            'quantity'      => 'required'
         ]);
+    
+        // $update = Facility::updated([
+        //     // 'room_id'           => $request->room_id,
+        //     'facility_id'       => $request->facility_id,
+        //     'quantity'          => $request->quantity
+        // ]);
+        // // $facilities = RoomFacility::find($id);
+        // $facilities = [];
+        // foreach($request->facility_id as $index => $facility) {
+        //     $facilities[$index]['room_id'] = $update->id;
+        //     $facilities[$index]['facility_id'] = $facility;
+        //     $facilities[$index]['quantity'] = $request->quantity[$index];
+        // }
 
-        $room->update($request->all());
+        // RoomFacility::updated($facilities);  
 
-        return redirect()->route('room.index')->with('succes','Siswa Berhasil di Update');
+        DB::table('rooms')->where('id',$request->id)->update([
+			'facility_id' => $request->facility_id,
+			'quantity' => $request->quantity,
+		]);
+        return redirect('room');
+        
+        // if($update){
+        //     //redirect dengan pesan sukses
+        //     return redirect()->route('room')->with(['success' => 'Data Berhasil Disimpan!']);
+        // }else{
+        //     //redirect dengan pesan error
+        //     return redirect()->route('editfacility')->with(['error' => 'Data Gagal Disimpan!']);
+        // }
     }
 
     /**
@@ -131,10 +160,17 @@ class RoomController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Room $room)
+    public function destroy($id)
     {
-        $room->delete();
+        $datas = Room::findOrFail($id);
+        $datas->delete();
 
-        return redirect()->route('room.index')->with('succes','room Berhasil di Hapus');
+    if($datas){
+        //redirect dengan pesan sukses
+        return redirect()->route('room')->with(['success' => 'Data Berhasil Dihapus!']);
+    }else{
+        //redirect dengan pesan error
+        return redirect()->route('room')->with(['error' => 'Data Gagal Dihapus!']);
+    }
     }
 }
