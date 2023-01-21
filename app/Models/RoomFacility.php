@@ -13,10 +13,12 @@ class RoomFacility extends Model
     
     protected $guarded = [];
 
+    public $timestamps = false;
+
     protected $with = ['facility'];
 
     protected $fillable = [
-    	'facility_id', 'quantity'
+    	'facility_id', 'quantity', 'room_id'
     ];
 
     public function facility() {

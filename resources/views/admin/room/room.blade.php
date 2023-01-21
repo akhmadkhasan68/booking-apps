@@ -28,7 +28,7 @@
               </td>
               <td class="col-2">
                 <div class="mb-2">
-                  <a href="{{ route('editfacility', $row->id) }}" class="btn btn-warning">Edit Facility</a>
+                  <a href="{{ route('editfacility', $row->id) }}" class="btn btn-warning">Edit</a>
 
                     <form action="{{ route('deleteroom', $row->id) }}" method="get">
                       @csrf

@@ -25,10 +25,9 @@
             <label>Floor</label>
             <select class="form-control col-md-10" id="floor" name="floor"> 
                 <option selected>------ Silahkan Pilih Lantai ------</option>
-                <option value="1">Lantai 1</option>
-                <option value="2">Lantai 2</option>
-                <option value="3">Lantai 3</option>
-                <option value="4">Lantai 4</option>
+                @for($i = 1; $i <= 10; $i++)
+                    <option value="{{ $i }}">Lantai {{ $i }}</option>
+                @endfor
             </select></div>
 
         <div class="mt-3">
