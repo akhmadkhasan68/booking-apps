@@ -150,9 +150,10 @@ class RoomController extends Controller
 
             Room::where('id', $id)->update($data);
 
-            //deleted facility
+            //deleted room facility
             RoomFacility::where('room_id', $id)->whereNotIn('facility_id', $request->facility_id)->delete();
 
+            //update or create room facility
             foreach($request->facility_id as $index => $facility) {
                 RoomFacility::updateOrCreate([
                     'room_id' => $id,
