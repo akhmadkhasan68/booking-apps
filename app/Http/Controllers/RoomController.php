@@ -7,6 +7,7 @@ use App\Models\Room;
 use App\Models\RoomFacility;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\DB;
 
 class RoomController extends Controller
 {
@@ -17,6 +18,7 @@ class RoomController extends Controller
      */
     public function index(Request $request)
     {
+
         $datas = Room::all();
         return view('admin.room.room', compact('datas'));
     }
@@ -89,9 +91,9 @@ class RoomController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Room $room)
+    public function show($id)
     {
-        return view('room.show', compact('room'));
+        //
     }
 
     /**
@@ -100,9 +102,12 @@ class RoomController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Room $room)
+    public function edit($id)
     {
-        return view('room.edit', compact('room'));
+        $datas = Room::find($id);
+        $facilities = Facility::all();
+        // $roomfacility = RoomFacility::all();
+        return view('admin.room.editfacility', compact('datas', 'facilities'));
     }
 
     /**
@@ -112,17 +117,60 @@ class RoomController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Room $room)
+    public function update(Request $request, $id)
     {
-        $request->validate([
-            'name' => 'required',
-            'floor' => 'required',
-            'capacity' => 'required',
+        $this->validate($request, [
+            'name'     => 'required',
+            'floor'   => 'required',
+            'capacity'   => 'required',
+            'facility_id'   => 'required',
+            'quantity'   => 'required',
+            'image'     => 'image|mimes:png,jpg,jpeg'
         ]);
 
-        $room->update($request->all());
+        try {
+            DB::beginTransaction();
+            
+            $data = [];
 
-        return redirect()->route('room.index')->with('succes','Siswa Berhasil di Update');
+            //upload image
+            if($request->hasFile('image')) {
+                $image = $request->file('image');
+                $extension = $image->getClientOriginalExtension();
+                $fileName = time().rand(0, 100).".".$extension;
+                $image->move(public_path('uploads/images'), $fileName); 
+                $url = URL::asset('uploads/images/'.$fileName);
+
+                $data['image'] = $url;
+            }
+        
+            $data['name'] = $request->name;
+            $data['floor'] = $request->floor;
+            $data['capacity'] = $request->capacity;
+
+            Room::where('id', $id)->update($data);
+
+            //deleted facility
+            RoomFacility::where('room_id', $id)->whereNotIn('facility_id', $request->facility_id)->delete();
+
+            foreach($request->facility_id as $index => $facility) {
+                RoomFacility::updateOrCreate([
+                    'room_id' => $id,
+                    'facility_id' => $facility
+                ], [
+                    'room_id' => $id,
+                    'facility_id' => $facility,
+                    'quantity' => $request->quantity[$index]
+                ]);
+            }
+            DB::commit();
+
+            return redirect()->route('room')->with(['success' => 'Data Berhasil Diupdate!']);
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return redirect()->route('editfacility', ['id' => $id])->with(['error' => 'Data Gagal Diupdate!']);
+        }
     }
 
     /**
@@ -131,10 +179,17 @@ class RoomController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Room $room)
+    public function destroy($id)
     {
-        $room->delete();
+        $datas = Room::findOrFail($id);
+        $datas->delete();
 
-        return redirect()->route('room.index')->with('succes','room Berhasil di Hapus');
+    if($datas){
+        //redirect dengan pesan sukses
+        return redirect()->route('room')->with(['success' => 'Data Berhasil Dihapus!']);
+    }else{
+        //redirect dengan pesan error
+        return redirect()->route('room')->with(['error' => 'Data Gagal Dihapus!']);
+    }
     }
 }

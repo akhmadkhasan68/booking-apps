@@ -22,6 +22,21 @@ class Room extends Model
     }
 
     public function facilities() {
-        return $this->hasMany(RoomFacility::class, 'room_id', 'id');
+        return $this->hasMany(Facility::class);
     }
+    public function room_facilities() {
+        return $this->hasMany(RoomFacility::class);
+    }
+
+    // protected $table = 'rooms';
+
+    // public function facilities()
+    // {
+    //     return $this->belongsTo(Facility::class, 'id');
+    // }
+
+    // public function room_facilities()
+    // {
+    //     return $this->belongsTo(RoomFacility::class, 'room_id');
+    // }
 }

@@ -15,4 +15,5 @@ class Facility extends Model
     public function rooms() {
         return $this->morphedByMany(Room::class, 'room_facilities');
     }
+
 }
