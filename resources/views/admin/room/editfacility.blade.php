@@ -11,11 +11,14 @@
     <form action="/admin/room/update/{{ $datas->id }}" method="POST" enctype="multipart/form-data">
 
         @csrf
-        {{-- @method('PUT') --}}
+        @method('PUT')
 
         <div class="mt-3">
-            <label>Add Image</label><br>
-            <input type="file" id="image" name="image" value="{{ $datas->image }}">
+            <img src="{{ $datas->image }}" alt="Gambar Room" width="100px">
+        </div>
+        <div class="mt-3">
+            <label>Add Image <span class="text-warning">*Upload gambar untuk mengubah gambar / kosongi jika tidak merubah</span></label><br>
+            <input type="file" id="image" name="image">
         </div>
 
          <div class="mt-3">
@@ -26,12 +29,10 @@
         <div class="mt-3">
             <label>Floor</label>
             <select class="form-control col-md-10" id="floor" name="floor"> 
-                <option selected>Lantai {{ $datas->floor }}</option>
-                <option value="1">Lantai 1</option>
-                <option value="2">Lantai 2</option>
-                <option value="3">Lantai 3</option>
-                <option value="4">Lantai 4</option>
-
+                <option>------ Silahkan Pilih Lantai ------</option>
+                @for($i = 1; $i <= 10; $i++)
+                    <option value="{{ $i }}" @if($i == $datas->floor) selected @endif>Lantai {{ $i }}</option>
+                @endfor
             </select>
         </div>
 
@@ -46,22 +47,29 @@
 
         <div class="mt-3">
             <label class="">Facility</label>
-            <div class="row mb-3 g-0">
-                <div class="col-md-5">
-                    <select class="form-control" name="facility_id[]"> 
-                        <option selected>------ Silahkan Pilih Fasilitas ------</option>
-                            @foreach($facilities as $facility)
-                                <option value="{{ $facility->id }}">{{ $facility->name }}</option>
-                            @endforeach
-                    </select>
+
+            @foreach($datas->room_facilities as $key => $roomFacility) 
+                <div class="row mb-3 g-0 facility-wrapper">
+                    <div class="col-md-5">
+                        <select class="form-control" name="facility_id[]"> 
+                            <option selected>------ Silahkan Pilih Fasilitas ------</option>
+                                @foreach($facilities as $facility)
+                                    <option value="{{ $facility->id }}" @if($facility->id == $roomFacility->facility_id) selected @endif>{{ $facility->name }}</option>
+                                @endforeach
+                        </select>
+                    </div>
+                    
+                    <div class="col-md-5">
+                        <input type="number" class="form-control" placeholder="Banyaknya" name="quantity[]" value="{{$roomFacility->quantity}}">
+                    </div>
+
+                    @if($key != 0)
+                        <div class="col-md-2">
+                            <button class="btn btn-danger btn-block button-delete-facility" type="button">Delete</button>
+                        </div>
+                    @endif
                 </div>
-                
-                <div class="col-md-5">
-                    {{-- @foreach ($roomfacility as $item) --}}
-                        <input type="number" class="form-control" placeholder="Banyaknya" name="quantity[]" >
-                    {{-- @endforeach --}}
-                </div>
-            </div>
+            @endforeach
 
             <div id="facility-section">
                 

@@ -117,41 +117,60 @@ class RoomController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request)
+    public function update(Request $request, $id)
     {
         $this->validate($request, [
+            'name'     => 'required',
+            'floor'   => 'required',
+            'capacity'   => 'required',
             'facility_id'   => 'required',
-            'quantity'      => 'required'
+            'quantity'   => 'required',
+            'image'     => 'image|mimes:png,jpg,jpeg'
         ]);
-    
-        // $update = Facility::updated([
-        //     // 'room_id'           => $request->room_id,
-        //     'facility_id'       => $request->facility_id,
-        //     'quantity'          => $request->quantity
-        // ]);
-        // // $facilities = RoomFacility::find($id);
-        // $facilities = [];
-        // foreach($request->facility_id as $index => $facility) {
-        //     $facilities[$index]['room_id'] = $update->id;
-        //     $facilities[$index]['facility_id'] = $facility;
-        //     $facilities[$index]['quantity'] = $request->quantity[$index];
-        // }
 
-        // RoomFacility::updated($facilities);  
+        try {
+            DB::beginTransaction();
+            
+            $data = [];
 
-        DB::table('rooms')->where('id',$request->id)->update([
-			'facility_id' => $request->facility_id,
-			'quantity' => $request->quantity,
-		]);
-        return redirect('room');
+            //upload image
+            if($request->hasFile('image')) {
+                $image = $request->file('image');
+                $extension = $image->getClientOriginalExtension();
+                $fileName = time().rand(0, 100).".".$extension;
+                $image->move(public_path('uploads/images'), $fileName); 
+                $url = URL::asset('uploads/images/'.$fileName);
+
+                $data['image'] = $url;
+            }
         
-        // if($update){
-        //     //redirect dengan pesan sukses
-        //     return redirect()->route('room')->with(['success' => 'Data Berhasil Disimpan!']);
-        // }else{
-        //     //redirect dengan pesan error
-        //     return redirect()->route('editfacility')->with(['error' => 'Data Gagal Disimpan!']);
-        // }
+            $data['name'] = $request->name;
+            $data['floor'] = $request->floor;
+            $data['capacity'] = $request->capacity;
+
+            Room::where('id', $id)->update($data);
+
+            //deleted facility
+            RoomFacility::where('room_id', $id)->whereNotIn('facility_id', $request->facility_id)->delete();
+
+            foreach($request->facility_id as $index => $facility) {
+                RoomFacility::updateOrCreate([
+                    'room_id' => $id,
+                    'facility_id' => $facility
+                ], [
+                    'room_id' => $id,
+                    'facility_id' => $facility,
+                    'quantity' => $request->quantity[$index]
+                ]);
+            }
+            DB::commit();
+
+            return redirect()->route('room')->with(['success' => 'Data Berhasil Diupdate!']);
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return redirect()->route('editfacility', ['id' => $id])->with(['error' => 'Data Gagal Diupdate!']);
+        }
     }
 
     /**

@@ -54,7 +54,7 @@ Route::get('/admin/room/editfacility', function () {
 Route::get('/admin/room', 'RoomController@index')->name('room');
 Route::get('/admin/room/addroom', 'RoomController@create')->name('addroom');
 Route::post('/admin/room/store', 'RoomController@store')->name('save');
-Route::get('/admin/room/editfacility{id}', 'RoomController@edit')->name('editfacility');
-// Route::post('/admin/room/update{id}', 'RoomController@update')->name('update');
-Route::post('/admin/room/updateS', 'RoomController@update');
+Route::get('/admin/room/editfacility/{id}', 'RoomController@edit')->name('editfacility');
+Route::put('/admin/room/update/{id}', 'RoomController@update')->name('update');
+// Route::post('/admin/room/updateS', 'RoomController@update');
 Route::get('/admin/room/delete/{id}', 'RoomController@destroy')->name('deleteroom');
