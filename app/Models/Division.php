@@ -13,6 +13,6 @@ class Division extends Model
     protected $guarded = [];
 
     public function members() {
-        return $this->belongsTo(Member::class);
+        return $this->hasMany(Member::class);
     }
 }
