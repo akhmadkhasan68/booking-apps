@@ -28,13 +28,13 @@ class AuthController extends Controller {
   }
 
   public function login(LoginRequest $request) {
-    // try {
+    try {
       $data = $this->authApiService->login($request);
 
       return ApiResponseHelper::successResponse("Success login account", $data);
-    // } catch (\Exception $e) {
-    //   return ApiResponseHelper::errorResponse($e->getMessage(), $e->getCode());
-    // }
+    } catch (\Exception $e) {
+      return ApiResponseHelper::errorResponse($e->getMessage(), $e->getCode());
+    }
   }
   
   public function register(RegisterRequest $request) {
