@@ -30,6 +30,10 @@ Route::get('/admin/usermanagement', function () {
     return view('admin/usermanagement/usermanagement');
 });
 
+Route::get('/admin/usermanagement/edituser', function () {
+    return view('admin/usermanagement/edituser');
+});
+
 Route::get('/admin/room', function () {
     return view('admin/room/room');
 });
@@ -58,3 +62,21 @@ Route::get('/admin/room/editfacility/{id}', 'RoomController@edit')->name('editfa
 Route::put('/admin/room/update/{id}', 'RoomController@update')->name('update');
 // Route::post('/admin/room/updateS', 'RoomController@update');
 Route::get('/admin/room/delete/{id}', 'RoomController@destroy')->name('deleteroom');
+//usermanagement
+Route::get('/admin/usermanagement', 'UserManagementController@index')->name('usermanagement');
+// Route::get('/admin/usermanagement/usermanagement', 'UserManagementController@create')->name('adduser');
+// Route::post('/admin/usermanagement/store', 'UserManagementController@store')->name('save');
+Route::get('/admin/usermanagement/edituser/{id}', 'UserManagementController@edit')->name('edituser');
+Route::post('/admin/usermanagement/update/{id}', 'UserManagementController@update')->name('update');
+Route::get('/admin/usermanagement/delete/{id}', 'UserManagementController@destroy')->name('deleteuser');
+
+//bookings
+Route::get('/admin/booking', 'BookingController@index')->name('booking');
+
+//report
+Route::get('/admin/reports', 'ReportsController@index')->name('report');
+
+Route::post('/admin/authlogin', 'AuthController@login');
+Route::get('/admin/authlogout', 'AuthController@logout');
+// Route::get('/admin/authlogout', 'AuthController@index')->name('logout');
+Route::get('/admin/logout', [AuthController::class, 'logout'])->name('logout');

@@ -25,6 +25,6 @@ class Member extends Model
     }
     
     public function division() {
-        return $this->belongsTo(Division::class);
+        return $this->hasOne(Division::class);
     }
 }

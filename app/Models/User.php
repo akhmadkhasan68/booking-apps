@@ -49,4 +49,9 @@ class User extends Authenticatable
     public function admin() {
         return $this->hasOne(Admin::class);
     }
+
+    public function division() {
+        return $this->hasOne(Division::class);
+    }
+    
 }

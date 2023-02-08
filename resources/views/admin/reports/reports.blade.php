@@ -12,28 +12,24 @@
         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
             <thead class="btn-primary">
                 <tr>
-                    <th>id</th>
-                    <th>member_id</th>
-                    <th>room_id</th>
-                    <th>Feedback_id</th>
-                    <th>Description</th>
-                    <th>Attachment</th>
-                    <th>Salary</th>
-                    <th>Action</th>
+                    <th>Name</th>
+                    <th>room name</th>
+                    <th>description</th>
+                    <th>media</th>
+                    <th>action</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td>Tiger Nixon</td>
-                    <td>System Architect</td>
-                    <td>Edinburgh</td>
-                    <td>61</td>
-                    <td>2011/04/25</td>
-                    <td>$320,800</td>
-                    <td>$320,800</td>
+                    @foreach ($datas as $index)
+                    <td>{{ $index->name }}</td>
+                    <td>{{ $index->room_name }}</td>
+                    <td>{{ $index->description }}</td>
+                    <td>{{ $index->attachment }}</td>
                     <td>
                         <a href="#" class="btn btn-primary">detail</a>
                     </td>
+                    @endforeach
                 </tr>
             </tbody>
         </table>

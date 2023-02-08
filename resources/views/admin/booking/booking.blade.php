@@ -12,30 +12,38 @@
         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
             <thead class="btn-primary">
                 <tr>
-                    <th>id</th>
-                    <th>Position</th>
-                    <th>Office</th>
-                    <th>Age</th>
+                    <th>name</th>
+                    <th>NIP</th>
+                    <th>Phone</th>
                     <th>Start date</th>
-                    <th>Salary</th>
-                    <th>Salary</th>
-                    <th>Aksi</th>
+                    <th>end date</th>
+                    <th>Participant</th>
+                    <th>Description</th>
+                    <th>room name</th>
+                    <th>division</th>
+                    {{-- <th>Action</th> --}}
                 </tr>
             </thead>
             <tbody>
+                @foreach ($datas as $index)
                 <tr>
-                    <td>Tiger Nixon</td>
-                    <td>System Architect</td>
-                    <td>Edinburgh</td>
-                    <td>61</td>
-                    <td>2011/04/25</td>
-                    <td>$320,800</td>
-                    <td>$320,800</td>
-                    <td>
+                   
+                    <td>{{ $index->users_name }}</td>
+                    <td>{{ $index->admin->nip ?? $index->member->nip }}</td>
+                    <td>{{ $index->phone }}</td>
+                    <td>{{ $index->booking_start_date }}</</td>
+                    <td>{{ $index->booking_end_date }}</</td>
+                    <td>{{ $index->participant }}</</td>
+                    <td>{{ $index->description }}</td>
+                    <td>{{ $index->rooms_name }}</</td>
+                    <td>{{ $index->division_name }}</</td>
+                    {{-- <td>
                         <a href="#" class="btn btn-success">Accept</a>
                         <a href="#" class="btn btn-danger">Declined</a>
-                    </td>
+                    </td> --}}
                 </tr>
+                @endforeach
+
             </tbody>
         </table>
     </div>
