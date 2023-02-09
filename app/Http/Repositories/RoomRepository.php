@@ -20,7 +20,7 @@ class RoomRepository {
 
   public function paginate(PaginateRequest $request) {
     try {
-      $data = $this->roomModel->with(['facilities']);
+      $data = $this->roomModel->with(['room_facilities', 'room_facilities.facility']);
   
       return PaginateTrait::make([
           'name',
@@ -50,7 +50,7 @@ class RoomRepository {
       $startDate = $date->copy()->startOfDay();
       $endDate = $date->copy()->endOfDay();
 
-      $query = $this->roomModel->with(['facilities', 'bookings', 'bookings.member'])->whereHas('bookings', function($q) use($startDate, $endDate) {
+      $query = $this->roomModel->with(['room_facilities', 'room_facilities.facility', 'bookings', 'bookings.member'])->whereHas('bookings', function($q) use($startDate, $endDate) {
         return $q->whereBetween('booking_start_date', [$startDate, $endDate])
         ->orWhereBetween('booking_end_date', [$startDate, $endDate]);
       });
@@ -72,7 +72,7 @@ class RoomRepository {
       $startDate = $date->copy()->startOfDay();
       $endDate = $date->copy()->endOfDay();
 
-      return $this->roomModel->with(['feedbacks', 'facilities', 'bookings', 'bookings.member'])->whereHas('bookings', function($q) use($startDate, $endDate) {
+      return $this->roomModel->with(['feedbacks', 'room_facilities', 'room_facilities.facility', 'bookings', 'bookings.member'])->whereHas('bookings', function($q) use($startDate, $endDate) {
         return $q->whereBetween('booking_start_date', [$startDate, $endDate])
         ->orWhereBetween('booking_end_date', [$startDate, $endDate]);
       })->where('id', $id)->firstOrFail();
@@ -85,7 +85,7 @@ class RoomRepository {
 
   public function getAvailableRoom($startDate, $endDate) {
     try {
-      return $this->roomModel->with(['facilities'])->whereDoesntHave('bookings', function($q) use($startDate, $endDate) {
+      return $this->roomModel->with(['room_facilities', 'room_facilities.facility'])->whereDoesntHave('bookings', function($q) use($startDate, $endDate) {
         return $q->whereBetween('booking_start_date', [$startDate, $endDate])
         ->orWhereBetween('booking_end_date', [$startDate, $endDate]);
       })->get();
@@ -96,7 +96,7 @@ class RoomRepository {
 
   public function findOneOrFail(array $where) {
     try {
-      return $this->roomModel->with(['feedbacks', 'facilities', 'bookings', 'bookings.member'])->where($where)->firstOrFail();
+      return $this->roomModel->with(['feedbacks', 'room_facilities', 'room_facilities.facility', 'bookings', 'bookings.member'])->where($where)->firstOrFail();
     } catch(ModelNotFoundException $e) {
       throw new \Exception('Data not found!', 404);
     } catch (\Exception $e) {
