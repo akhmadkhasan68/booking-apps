@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Repositories;
 
+use App\Enums\BookingStatusEnum;
 use App\Http\Requests\PaginateRequest;
 use App\Models\Booking;
 use App\Traits\PaginateTrait;
@@ -19,6 +20,7 @@ class BookingRepository {
 
   public function create(array $data) {
     try {
+      $data['status'] = BookingStatusEnum::PENDING;
       return $this->bookingModel->create($data);
     } catch (\Exception $e) {
       throw $e;
@@ -49,6 +51,19 @@ class BookingRepository {
       return $this->bookingModel->with(['room', 'member'])->where($where)->firstOrFail();
     } catch(ModelNotFoundException $e) {
       throw new Exception("Data not found!", 404);
+    } catch (\Exception $e) {
+      throw $e;
+    }
+  }
+
+  public function getTopFiveFrequentlyRoomBooked() {
+    try {
+      return $this->bookingModel->selectRaw('rooms.name, count(*) as total')
+          ->join('rooms', 'rooms.id', '=', 'bookings.room_id')
+          ->groupBy('rooms.name')
+          ->orderBy('total', 'desc')
+          ->limit(5)
+          ->get();
     } catch (\Exception $e) {
       throw $e;
     }

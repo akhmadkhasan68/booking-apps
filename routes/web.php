@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,9 +23,7 @@ Route::get('/register', function () {
     return view('register');
 });
 
-Route::get('/dashboard', function () {
-    return view('admin/dashboard');
-});
+Route::get('/dashboard', [DashboardController::class, 'index']);
 
 Route::get('/admin/usermanagement', function () {
     return view('admin/usermanagement/usermanagement');
@@ -60,21 +59,25 @@ Route::get('/admin/room/addroom', 'RoomController@create')->name('addroom');
 Route::post('/admin/room/store', 'RoomController@store')->name('save');
 Route::get('/admin/room/editfacility/{id}', 'RoomController@edit')->name('editfacility');
 Route::put('/admin/room/update/{id}', 'RoomController@update')->name('update');
-// Route::post('/admin/room/updateS', 'RoomController@update');
 Route::get('/admin/room/delete/{id}', 'RoomController@destroy')->name('deleteroom');
+
 //usermanagement
 Route::get('/admin/usermanagement', 'UserManagementController@index')->name('usermanagement');
-// Route::get('/admin/usermanagement/usermanagement', 'UserManagementController@create')->name('adduser');
-// Route::post('/admin/usermanagement/store', 'UserManagementController@store')->name('save');
 Route::get('/admin/usermanagement/edituser/{id}', 'UserManagementController@edit')->name('edituser');
+Route::get('/admin/usermanagement/detailuser/{id}', 'UserManagementController@show')->name('detailuser');
 Route::post('/admin/usermanagement/update/{id}', 'UserManagementController@update')->name('update');
 Route::get('/admin/usermanagement/delete/{id}', 'UserManagementController@destroy')->name('deleteuser');
 
 //bookings
 Route::get('/admin/booking', 'BookingController@index')->name('booking');
+Route::get('/admin/booking/{id}', 'BookingController@show')->name('detailbooking');
+Route::get('/admin/booking/approvebooking/{id}', 'BookingController@approvebooking')->name('approvebooking');
+Route::post('/admin/booking/approvebookingaction', 'BookingController@approvebookingaction')->name('approvebookingaction');
+Route::post('/admin/booking/cancel/{id}', 'BookingController@cancel')->name('cancelbooking');
 
 //report
 Route::get('/admin/reports', 'ReportsController@index')->name('report');
+Route::get('/admin/reports/{id}', 'ReportsController@show')->name('detailreport');
 
 Route::post('/admin/authlogin', 'AuthController@login');
 Route::get('/admin/authlogout', 'AuthController@logout');

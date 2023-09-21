@@ -63,7 +63,15 @@ class UserManagementController extends Controller
      */
     public function show($id)
     {
-        //
+        try {
+            $data = User::with(['member', 'member.division'])->findOrFail($id);
+
+            return view('admin.usermanagement.detailuser', compact('data'));
+        } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            abort(404);
+        }catch (\Exception $e) {
+            abort(500, $e->getMessage());
+        }
     }
 
     /**

@@ -28,6 +28,7 @@ class BookingService {
             $description = $request->description;
             $divisionId = $request->division_id;
             $roomId = $request->room_id;
+            $participantType = $request->participant_type;
 
             $availableRoomIds = collect($this->roomRepository->getAvailableRoom($startDate, $endDate))->pluck('id')->toArray();
 
@@ -46,7 +47,8 @@ class BookingService {
                 'phone' => $phone,
                 'description' => $description,
                 'participant' => $participant,
-                'division_id' => (int)$divisionId
+                'division_id' => (int)$divisionId,
+                'participant_type' => $participantType
             ]);
           } catch (\Exception $e) {
             throw $e;
