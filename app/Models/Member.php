@@ -13,7 +13,7 @@ class Member extends Model
     protected $guarded = [];
 
     public function user() {
-        return $this->belongsTo(Admin::class);
+        return $this->belongsTo(User::class);
     }
     
     public function feedbacks() {

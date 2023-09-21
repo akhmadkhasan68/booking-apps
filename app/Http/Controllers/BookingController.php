@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\BookingStatusEnum;
 use Illuminate\Http\Request;
 use App\Models\Booking;
-
+use Illuminate\Support\Facades\URL;
 
 class BookingController extends Controller
 {
@@ -16,8 +17,7 @@ class BookingController extends Controller
     public function index()
     {
         //
-        $datas = Booking::selectRaw('*, users.name as users_name, divisions.name as division_name, members.nip as member_nip, rooms.name as rooms_name ')->leftjoin('members', 'members.id', '=', 'bookings.member_id')
-        ->leftjoin('divisions', 'members.division_id', '=', 'divisions.id')->leftjoin('rooms', 'bookings.room_id', '=', 'rooms.id')->leftjoin('users', 'members.user_id', '=', 'users.id')->get();
+        $datas = Booking::with(['member', 'member.user', 'member.division', 'room'])->get();
 
         // dd(Booking::all());
         return view('admin.booking.booking', compact('datas'));
@@ -52,7 +52,72 @@ class BookingController extends Controller
      */
     public function show($id)
     {
-        //
+        try {
+            $data = Booking::with(['member', 'member.user', 'member.division', 'room'])->findOrFail($id);
+
+            return view('admin.booking.detail', compact('data'));
+        } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            abort(404);
+        }catch (\Exception $e) {
+            abort(500, $e->getMessage());
+        }
+    }
+
+    public function approvebooking($id) {
+        try {
+            $data = Booking::with(['member', 'member.user', 'member.division', 'room'])->findOrFail($id);
+
+            return view('admin.booking.approve', compact('data'));
+        } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            abort(404);
+        }catch (\Exception $e) {
+            abort(500, $e->getMessage());
+        }
+    }
+
+    public function approvebookingaction(Request $request) {
+        $this->validate($request, [
+            'attachment'     => 'required',
+            'id'            => 'required'
+        ]);
+
+        $data = [];
+
+        //upload image
+        if($request->hasFile('attachment')) {
+            $attachment = $request->file('attachment');
+            $extension = $attachment->getClientOriginalExtension();
+            $fileName = time().rand(0, 100).".".$extension;
+            $attachment->move(public_path('uploads/file'), $fileName); 
+            $url = URL::asset('uploads/file/'.$fileName);
+
+            $data['attachment'] = $url;
+        }
+
+        try {
+            $data['status'] = BookingStatusEnum::DONE;
+            $booking = Booking::findOrFail($request->id);
+            $booking->update($data);
+
+            return redirect()->route('booking')->with('success', 'Booking has been approved!');
+        } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            abort(404);
+        }
+    }
+
+    public function cancel($id)
+    {
+        try {
+            $data = Booking::findOrFail($id);
+            $data->status = BookingStatusEnum::CANCELED;
+            $data->save();
+
+            return redirect()->route('booking')->with('success', 'Booking has been canceled!');
+        } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            abort(404);
+        }catch (\Exception $e) {
+            abort(500, $e->getMessage());
+        }
     }
 
     /**

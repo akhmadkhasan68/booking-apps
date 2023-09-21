@@ -17,9 +17,13 @@ class ReportsController extends Controller
      */
     public function index()
     {
-        //
-        $datas = Feedback::selectRaw('*, users.id as users_name, users.name as name, rooms.name as rooms_name ')->leftjoin('members', 'members.user_id', '=', 'feedbacks.member_id')
-        ->leftjoin('feedback_medias', 'feedback_medias.feedback_id', '=', 'feedbacks.id')->leftjoin('rooms', 'feedbacks.room_id', '=', 'rooms.id')->leftjoin('users', 'members.user_id', '=', 'users.id')->where('roles','MEMBER')->get();
+        $datas = Feedback::with([
+            'member',
+            'member.user',
+            'member.division',
+            'room',
+            'medias'
+        ])->get();
 
         return view('admin.reports.reports', compact('datas'));
     }
@@ -53,7 +57,21 @@ class ReportsController extends Controller
      */
     public function show($id)
     {
-        //
+        try {
+            $data = Feedback::with([
+                'member',
+                'member.user',
+                'member.division',
+                'room',
+                'medias'
+            ])->findOrFail($id);
+
+            return view('admin.reports.detail', compact('data'));
+        } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            abort(404);
+        }catch (\Exception $e) {
+            abort(500, $e->getMessage());
+        }
     }
 
     /**

@@ -7,7 +7,6 @@ use App\Http\Controllers\Api\Divisions\DivisionController;
 use App\Http\Controllers\Api\Feedback\FeedbackController;
 use App\Http\Controllers\Api\Profile\ProfileController;
 use App\Http\Controllers\Api\Room\RoomController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
