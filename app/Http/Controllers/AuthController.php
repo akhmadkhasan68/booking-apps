@@ -10,6 +10,7 @@ use Hash;
 use Session;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
 {
@@ -39,15 +40,16 @@ class AuthController extends Controller
             'password' => $request->input('password'),
         ];
 
-        Auth::attempt($data);
+        $loginAttempt = Auth::attempt($data);
 
-        if (Auth::check() && Auth::user()->roles == 'ADMIN') {
-            return redirect()->to('/dashboard');
-        } else {
-            Auth::logout();
+        Log::debug(Auth::user());
+
+        if(!$loginAttempt || !Auth::user()->roles == 'ADMIN') {
             Session::flash('error', 'Email atau password salah');
             return redirect()->back();
-        }
+        } 
+
+        return redirect('dashboard');
         /**
          * Display a listing of the resource.
          *

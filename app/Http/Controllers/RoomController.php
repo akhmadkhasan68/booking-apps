@@ -8,6 +8,7 @@ use App\Models\RoomFacility;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class RoomController extends Controller
 {
@@ -44,7 +45,7 @@ class RoomController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
+        $validator = Validator::make($request->all(), [
             'name'     => 'required',
             'floor'   => 'required',
             'capacity'   => 'required',
@@ -52,6 +53,14 @@ class RoomController extends Controller
             'quantity'   => 'required',
             'image'     => 'required|image|mimes:png,jpg,jpeg'
         ]);
+
+        if($validator->fails()) {
+            // return json
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors()->toArray()
+            ], 400);
+        }
     
         //upload image
         $image = $request->file('image');
@@ -74,14 +83,18 @@ class RoomController extends Controller
             $facilities[$index]['quantity'] = $request->quantity[$index];
         }
 
-        RoomFacility::insert($facilities);
-    
-        if($create){
-            //redirect dengan pesan sukses
-            return redirect()->route('room')->with(['success' => 'Data Berhasil Disimpan!']);
-        }else{
-            //redirect dengan pesan error
-            return redirect()->route('addroom')->with(['error' => 'Data Gagal Disimpan!']);
+        try {
+            RoomFacility::insert($facilities);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Data Berhasil Disimpan!'
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Data Gagal Disimpan!'
+            ], 500);
         }
     }
 
@@ -119,7 +132,7 @@ class RoomController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->validate($request, [
+        $validator = Validator::make($request->all(), [
             'name'     => 'required',
             'floor'   => 'required',
             'capacity'   => 'required',
@@ -127,6 +140,14 @@ class RoomController extends Controller
             'quantity'   => 'required',
             'image'     => 'image|mimes:png,jpg,jpeg'
         ]);
+
+        if($validator->fails()) {
+            // return json
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors()->toArray()
+            ], 400);
+        }
 
         try {
             DB::beginTransaction();
@@ -166,11 +187,17 @@ class RoomController extends Controller
             }
             DB::commit();
 
-            return redirect()->route('room')->with(['success' => 'Data Berhasil Diupdate!']);
+            return response()->json([
+                'success' => true,
+                'message' => 'Data Berhasil Disimpan!'
+            ], 200);
         } catch (\Exception $e) {
             DB::rollBack();
 
-            return redirect()->route('editfacility', ['id' => $id])->with(['error' => 'Data Gagal Diupdate!']);
+            return response()->json([
+                'success' => false,
+                'message' => 'Data Gagal Disimpan!'
+            ], 500);
         }
     }
 
