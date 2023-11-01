@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Repositories;
 
+use App\Enums\BookingStatusEnum;
 use App\Http\Requests\PaginateRequest;
 use App\Http\Requests\Room\SearchAvailableRequest;
 use App\Models\Room;
@@ -86,8 +87,10 @@ class RoomRepository {
   public function getAvailableRoom($startDate, $endDate) {
     try {
       return $this->roomModel->with(['room_facilities', 'room_facilities.facility'])->whereDoesntHave('bookings', function($q) use($startDate, $endDate) {
-        return $q->whereBetween('booking_start_date', [$startDate, $endDate])
-        ->orWhereBetween('booking_end_date', [$startDate, $endDate]);
+        return $q->where(function($sub) use($startDate, $endDate) {
+          return $sub->whereBetween('booking_start_date', [$startDate, $endDate])
+          ->orWhereBetween('booking_end_date', [$startDate, $endDate]);
+        })->where('status', '!=', BookingStatusEnum::CANCELED->value);
       })->get();
     } catch (\Exception $e) {
       throw $e;
