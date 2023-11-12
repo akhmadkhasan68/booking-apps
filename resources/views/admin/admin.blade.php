@@ -20,6 +20,8 @@
     <!-- Custom styles for this template-->
     <link href="{{ asset('sbadmin2/css/sb-admin-2.min.css') }}" rel="stylesheet">
 
+    <!-- toastr -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
 </head>
 
 <body id="page-top">
@@ -119,6 +121,12 @@
     <!-- Page level custom scripts -->
     <script src="{{ asset('sbadmin2/js/demo/chart-area-demo.js') }}"></script>
     <script src="{{ asset('sbadmin2/js/demo/chart-pie-demo.js') }}"></script>
+
+    <!-- toastr -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+    <!-- custom js -->
+    <script src="{{ asset('js/custom.js') }}"></script>
                     
     @yield('js')
 </body>

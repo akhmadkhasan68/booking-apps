@@ -189,7 +189,7 @@
                     Activity Log
                 </a> --}}
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="{{ URL::to('logout') }}">
+                <a class="dropdown-item" href="{{ route('logout') }}">
                     {{-- <button type="submit" class="btn btn-primary btn-user btn-block">
                         Logout
                     </button> --}}

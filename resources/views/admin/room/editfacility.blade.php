@@ -8,7 +8,7 @@
         <a href="{{ route('room') }}" class="btn btn-danger mb-5">Back</a>
     </div>
     {{-- <form action="{{ route('update') }}" method="POST" enctype="multipart/form-data"> --}}
-    <form action="/admin/room/update/{{ $datas->id }}" method="POST" enctype="multipart/form-data">
+    <form id="updateroom" action="/admin/room/update/{{ $datas->id }}" method="POST" enctype="multipart/form-data">
 
         @csrf
         @method('PUT')
@@ -117,6 +117,18 @@
 
     $(document).on("click", ".button-delete-facility", function() {
         $(this).parents().remove(".facility-wrapper"); 
+    });
+
+
+    $(document).on("submit", "#updateroom", function(e) {
+        e.preventDefault();
+        const form = $(this);
+        const url = form.attr('action');
+        const method = form.attr('method');
+        const redirect = '{{ route("room") }}';
+        const data = new FormData(form[0]);
+
+        submitForm(url, method, data, redirect);
     });
 </script>
 @endsection

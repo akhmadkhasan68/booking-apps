@@ -15,6 +15,10 @@ class MemberRepository {
     return $this->memberModel->with(['user', 'feedbacks', 'booking'])->where($where)->first();
   }
 
+  public function findOneOrFail(array $where) {
+    return $this->memberModel->with(['user', 'feedbacks', 'booking'])->where($where)->firstOrFail();
+  }
+
   public function create($data) {
     return $this->memberModel->create($data);
   }
