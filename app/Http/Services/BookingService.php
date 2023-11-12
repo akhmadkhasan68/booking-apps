@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Log\Logger;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\URL;
 
 class BookingService {
     protected $roomRepository;
@@ -34,6 +35,7 @@ class BookingService {
             $divisionId = $request->division_id;
             $roomId = $request->room_id;
             $participantType = $request->participant_type;
+            $divisionType = $request->division_type;
 
             $availableRoomIds = collect($this->roomRepository->getAvailableRoom($startDate, $endDate))->pluck('id')->toArray();
 
@@ -45,7 +47,7 @@ class BookingService {
                 'user_id' => auth()->user()->id
             ]);
 
-            return $this->bookingRepository->create([
+            $data = [
                 'member_id' => $member->id,
                 'room_id' => (int)$roomId,
                 'booking_date' => Carbon::now()->format('Y-m-d H:i:s'),
@@ -57,8 +59,22 @@ class BookingService {
                 'description' => $description,
                 'participant' => $participant,
                 'division_id' => (int)$divisionId,
-                'participant_type' => $participantType
-            ]);
+                'participant_type' => $participantType,
+                'division_type' => $divisionType,
+            ];
+
+            //upload image
+            if($request->hasFile('attachment')) {
+                $attachment = $request->file('attachment');
+                $extension = $attachment->getClientOriginalExtension();
+                $fileName = time().rand(0, 100).".".$extension;
+                $attachment->move(public_path('uploads/file'), $fileName); 
+                $url = URL::asset('uploads/file/'.$fileName);
+
+                $data['attachment'] = $url;
+            }
+
+            return $this->bookingRepository->create($data);
           } catch (\Exception $e) {
             throw $e;
           }

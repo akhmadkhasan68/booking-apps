@@ -20,7 +20,11 @@
                                 @csrf
                                 <button type="submit" class="btn btn-warning mt-3">Cancel</button>
                             </form>
-                            <a href="{{ route('approvebooking', $data->id) }}" class="btn btn-success mt-3">Approve</a>
+                            <form action="{{ route('approvebooking', $data->id) }}" method="post">
+                                @csrf
+                                <button type="submit" class="btn btn-success mt-3">Approve</button>
+                            </form>
+                            <!-- <a href="{{ route('approvebooking', $data->id) }}" class="btn btn-success mt-3">Approve</a> -->
                         </div>
                     </div>
                     <br>
@@ -36,7 +40,11 @@
                         </tr>
                         <tr>
                             <td>Divisi</td>
-                            <td>{{ $data->member->division->name }}</td>
+                            <td>{{ $data->member->division->name ?? '-' }}</td>
+                        </tr>
+                        <tr>
+                            <td>Tipe Divisi</td>
+                            <td>{{ $data->division_type }}</td>
                         </tr>
                         <tr>
                             <td>Nomor Telepon</td>
