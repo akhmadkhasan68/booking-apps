@@ -8,7 +8,7 @@ use App\Models\Member;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Facades\Hash;
 
 class UserManagementController extends Controller
 {
@@ -107,39 +107,15 @@ class UserManagementController extends Controller
      */
     public function update(Request $request, $id)
     {
-        
-        // $this->validate($request, [
-        //     'name'     => 'required',
-        //     'email'   => 'required',
-        //     'phone'   => 'required',
-        //     'password'   => 'required',
-        //     'division_id'   => 'required',
-        //     'gender'     => 'required',
-        //     'address'     => 'required',
-        //     'nip'     => 'required'
-        // ]);
         try {
-            // DB::beginTransaction();
-            
             $data = [];
-
-            //upload image
-            // if($request->hasFile('image')) {
-            //     $image = $request->file('image');
-            //     $extension = $image->getClientOriginalExtension();
-            //     $fileName = time().rand(0, 100).".".$extension;
-            //     $image->move(public_path('uploads/images'), $fileName); 
-            //     $url = URL::asset('uploads/images/'.$fileName);
-
-            //     $data['image'] = $url;
-            // }
-        
             $data['name'] = $request->name;
             $data['email'] = $request->email;
             $data['phone'] = $request->phone;
-            $data['password'] = $request->password;
 
-            // dd($id);
+            if($request->password !== '') {
+                $data['password'] = Hash::make($request->password);
+            }
 
             User::where('id', $id)->update($data);
 

@@ -79,9 +79,10 @@ Route::middleware(['auth'])->group(function () {
         //bookings
         Route::get('/booking', 'BookingController@index')->name('booking');
         Route::get('/booking/{id}', 'BookingController@show')->name('detailbooking');
-        Route::get('/booking/approvebooking/{id}', 'BookingController@approvebooking')->name('approvebooking');
-        Route::post('/booking/approvebookingaction', 'BookingController@approvebookingaction')->name('approvebookingaction');
+        // Route::get('/booking/approvebooking/{id}', 'BookingController@approvebooking')->name('approvebooking');
+        // Route::post('/booking/approvebookingaction', 'BookingController@approvebookingaction')->name('approvebookingaction');
         Route::post('/booking/cancel/{id}', 'BookingController@cancel')->name('cancelbooking');
+        Route::post('/booking/approvebooking/{id}', 'BookingController@approvebooking')->name('approvebooking');
         
         //report
         Route::get('/reports', 'ReportsController@index')->name('report');

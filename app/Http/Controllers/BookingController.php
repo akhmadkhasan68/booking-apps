@@ -65,9 +65,11 @@ class BookingController extends Controller
 
     public function approvebooking($id) {
         try {
-            $data = Booking::with(['member', 'member.user', 'member.division', 'room'])->findOrFail($id);
+            $data = Booking::findOrFail($id);
+            $data->status = BookingStatusEnum::DONE;
+            $data->save();
 
-            return view('admin.booking.approve', compact('data'));
+            return redirect()->route('booking')->with('success', 'Booking has been approved!');
         } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             abort(404);
         }catch (\Exception $e) {
