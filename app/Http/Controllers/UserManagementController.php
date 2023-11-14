@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Admin;
 use App\Models\Division;
 use App\Models\Member;
 use App\Models\User;
@@ -24,7 +23,7 @@ class UserManagementController extends Controller
         // return response()->json($datas);
         // $datas = User::all();
         $datas = User::selectRaw('*, users.id as id, divisions.name as division_name, users.name as name, members.gender as member_gender, members.address as member_address, members.nip as member_nip, members.nip as member_nip ')->leftjoin('members', 'members.user_id', '=', 'users.id')
-        ->leftjoin('divisions', 'members.division_id', '=', 'divisions.id')->where('roles','MEMBER')->get();
+            ->leftjoin('divisions', 'members.division_id', '=', 'divisions.id')->where('roles', 'MEMBER')->get();
         // dd($datas);
 
         return view('admin.usermanagement.usermanagement', compact('datas'));
@@ -37,11 +36,9 @@ class UserManagementController extends Controller
      */
     public function create()
     {
-        //
-        // $create = new User;
-        // $divisions = Division::all();
-
-        // return view('admin.usermanagement.usermanagement', compact('create', 'divisions'));
+        $users = User::all();
+        $divisions = Division::all();
+        return view('admin.usermanagement.adduser', compact('divisions', 'users'));
     }
 
     /**
@@ -52,7 +49,50 @@ class UserManagementController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $this->validate($request, [
+                'name' => 'required',
+                'email' => 'required|email|unique:users',
+                'phone' => 'required',
+                'password' => 'required',
+                'division_id' => 'required',
+                'gender' => 'required',
+                'address' => 'required',
+                'nip' => 'required|unique:members',
+            ], [
+                'name.required' => 'Nama wajib diisi',
+                'email.required' => 'Email wajib diisi',
+                'phone.required' => 'No Hp wajib diisi',
+                'password.required' => 'Password wajib diisi',
+                'division_id.required' => 'Divisi wajib diisi',
+                'gender.required' => 'Jenis Kelamin wajib diisi',
+                'address.required' => 'Alamat wajib diisi',
+                'nip.required' => 'NIP wajib diisi',
+            ]);
+
+            // Buat user baru
+            $user = new User();
+            $user->name = $request->input('name');
+            $user->email = $request->input('email');
+            $user->phone = $request->input('phone');
+            $user->password = bcrypt($request->input('password'));
+            $user->roles = 'MEMBER';
+            $user->save();
+
+            $member = new Member();
+            $member->user_id = $user->id;
+            $member->name = $user->name;
+            $member->division_id = $request->input('division_id');
+            $member->gender = $request->input('gender');
+            $member->address = $request->input('address');
+            $member->nip = $request->input('nip');
+            $member->save();
+
+            return redirect('/admin/usermanagement')->with(['success' => 'Data Berhasil Ditambah!']);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with(['error' => 'Data Gagal Ditambah!']);
+        }
     }
 
     /**
@@ -67,9 +107,9 @@ class UserManagementController extends Controller
             $data = User::with(['member', 'member.division'])->findOrFail($id);
 
             return view('admin.usermanagement.detailuser', compact('data'));
-        } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             abort(404);
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
             abort(500, $e->getMessage());
         }
     }
@@ -91,7 +131,7 @@ class UserManagementController extends Controller
             // $members = Member::all();
             // $admins = Admin::all();
             $datas = User::selectRaw('*, users.name as users_name, divisions.name as division_name, users.name as name, members.gender as member_gender, members.address as member_address, members.nip as member_nip, members.nip as member_nip ')->leftjoin('members', 'members.user_id', '=', 'users.id')
-            ->leftjoin('divisions', 'members.division_id', '=', 'divisions.id')->where('users.id', $id)->first();
+                ->leftjoin('divisions', 'members.division_id', '=', 'divisions.id')->where('users.id', $id)->first();
             // $roomfacility = RoomFacility::all();
             // dd($datas);
             return view('admin.usermanagement.edituser', compact('datas', 'divisions', 'id'));
@@ -113,7 +153,7 @@ class UserManagementController extends Controller
             $data['email'] = $request->email;
             $data['phone'] = $request->phone;
 
-            if($request->password !== '') {
+            if ($request->password !== '') {
                 $data['password'] = Hash::make($request->password);
             }
 
@@ -123,7 +163,7 @@ class UserManagementController extends Controller
                 'division_id' => $request->division_id,
                 'address' => $request->address,
                 'gender' => $request->gender,
-                'nip' => $request->nip
+                'nip' => $request->nip,
             ]);
 
             return redirect()->to('admin/usermanagement')->with(['success' => 'Data Berhasil Diupdate!']);
@@ -146,12 +186,12 @@ class UserManagementController extends Controller
         $datas = User::findOrFail($id);
         $datas->delete();
 
-    if($datas){
-        //redirect dengan pesan sukses
-        return redirect()->route('usermanagement')->with(['success' => 'Data Berhasil Dihapus!']);
-    }else{
-        //redirect dengan pesan error
-        return redirect()->route('usermanagement')->with(['error' => 'Data Gagal Dihapus!']);
-    }
+        if ($datas) {
+            //redirect dengan pesan sukses
+            return redirect()->route('usermanagement')->with(['success' => 'Data Berhasil Dihapus!']);
+        } else {
+            //redirect dengan pesan error
+            return redirect()->route('usermanagement')->with(['error' => 'Data Gagal Dihapus!']);
+        }
     }
 }

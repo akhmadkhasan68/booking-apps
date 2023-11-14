@@ -1,13 +1,13 @@
 @extends('admin.admin')
 @section('title')
-    
+
 @endsection
 @section('content')
 <div class="card card-primary">
 <div class="card-body">
 
     <h3 class="card-title">User Management</h3>
-    
+
     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
         <thead class="btn-primary">
             <tr>
@@ -17,7 +17,7 @@
                 <th>No. Handphone</th>
                 <th>NIP</th>
                 <th>Aksi</th>
-                
+
             </tr>
         </thead>
         <tbody>
@@ -42,4 +42,7 @@
     </table>
 </div>
 </div>
+<div class="w-100 text-center">
+    <a class="btn btn-primary mt-5" href="{{ route('adduser') }}">Tambah User</a>
+  </div>
 @endsection
