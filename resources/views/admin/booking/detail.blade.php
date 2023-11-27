@@ -43,10 +43,6 @@
                             <td>{{ $data->member->division->name ?? '-' }}</td>
                         </tr>
                         <tr>
-                            <td>Tipe Divisi</td>
-                            <td>{{ $data->division_type }}</td>
-                        </tr>
-                        <tr>
                             <td>Nomor Telepon</td>
                             <td>{{ $data->member->user->phone }}</td>
                         </tr>

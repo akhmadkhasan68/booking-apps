@@ -32,7 +32,7 @@ class BookingRequest extends FormRequest
                 'numeric',
                 Rule::exists('divisions', 'id')
             ],
-            'division_type' => [
+            'participant_type' => [
                 'required',
                 Rule::in([
                     DivisionTypeEnum::INTERNAL->value,
@@ -50,7 +50,6 @@ class BookingRequest extends FormRequest
             'end_date' => 'required|date_format:Y-m-d H:i:s|after_or_equal:' . $this->start_date,
             'participant' => 'required|numeric',
             'description' => 'required',
-            'participant_type' => 'required',
             'attachment' => 'required|file|mimes:jpg,png,jpeg,pdf,doc,docx,xls,xlsx,ppt,pptx|max:2048'
         ];
     }

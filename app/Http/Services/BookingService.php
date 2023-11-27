@@ -35,7 +35,6 @@ class BookingService {
             $divisionId = $request->division_id;
             $roomId = $request->room_id;
             $participantType = $request->participant_type;
-            $divisionType = $request->division_type;
 
             $availableRoomIds = collect($this->roomRepository->getAvailableRoom($startDate, $endDate))->pluck('id')->toArray();
 
@@ -60,7 +59,6 @@ class BookingService {
                 'participant' => $participant,
                 'division_id' => (int)$divisionId,
                 'participant_type' => $participantType,
-                'division_type' => $divisionType,
             ];
 
             //upload image
