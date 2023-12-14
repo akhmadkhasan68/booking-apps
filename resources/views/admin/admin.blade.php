@@ -9,7 +9,12 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Dashboard</title>
+    <title> SIMARU - Sistem Informasi Manajemen Ruang Diskominfo Jatim </title>
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/png" sizes="16x16" href="{{asset('img/Logo_Kominfo_Jatim.png')}}"
+        style="height: max-content" />
+    <link rel="apple-touch-icon" type="image/png" sizes="16x16" href="{{asset('img/Logo_Kominfo_Jatim.png')}}" />
 
     <!-- Custom fonts for this template-->
     <link href="{{ asset('sbadmin2/vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
@@ -30,9 +35,9 @@
     <div id="wrapper">
 
         <!-- Sidebar -->
-@section('sidebar')
-    @include('admin.sidebar')  
-@show
+        @section('sidebar')
+        @include('admin.sidebar')
+        @show
 
         <!-- End of Sidebar -->
 
@@ -43,7 +48,7 @@
             <div id="content">
 
                 <!-- Topbar -->
-@include('admin/header')
+                @include('admin/header')
                 <!-- End of Topbar -->
 
                 <!-- Begin Page Content -->
@@ -59,7 +64,7 @@
                     <!-- Content Row -->
 
                     <!-- Content Row -->
-@yield('content')
+                    @yield('content')
 
                     <!-- Content Row -->
 
@@ -70,7 +75,7 @@
             <!-- End of Main Content -->
 
             <!-- Footer -->
-           @include('admin/footer')
+            @include('admin/footer')
             <!-- End of Footer -->
 
         </div>
@@ -127,7 +132,7 @@
 
     <!-- custom js -->
     <script src="{{ asset('js/custom.js') }}"></script>
-                    
+
     @yield('js')
 </body>
 

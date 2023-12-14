@@ -10,9 +10,10 @@
     <meta name="author" content="">
 
     <title>SIMARU - Login</title>
-  <!-- Favicons -->
-  <link rel="icon" type="image/png" sizes="16x16" href="{{asset('img/Logo_Kominfo_Jatim.png')}}" style="height: max-content" />
-  <link rel="apple-touch-icon" type="image/png" sizes="16x16" href="{{asset('img/Logo_Kominfo_Jatim.png')}}" />
+    <!-- Favicons -->
+    <link rel="icon" type="image/png" sizes="16x16" href="{{asset('img/Logo_Kominfo_Jatim.png')}}"
+        style="height: max-content" />
+    <link rel="apple-touch-icon" type="image/png" sizes="16x16" href="{{asset('img/Logo_Kominfo_Jatim.png')}}" />
 
     <!-- Custom fonts for this template-->
     <link href="sbadmin2/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -40,7 +41,8 @@
                         <div class="row">
                             <div class="col-lg-6 d-none d-lg-block my-auto">
                                 <div class="text-center ">
-                                    <img src="{{ asset('img/Logo_Kominfo_Jatim.png') }}" alt="Your Image" style="width: 300px" height="300px">
+                                    <img src="{{ asset('img/Logo_Kominfo_Jatim.png') }}" alt="Your Image"
+                                        style="width: 300px" height="300px">
                                 </div>
                             </div>
                             <div class="col-lg-6">
@@ -57,8 +59,9 @@
                                                 placeholder="Masukan Email">
                                         </div>
                                         <div class="form-group">
-                                            <input type="password" name="password" class="form-control form-control-user"
-                                                id="exampleInputPassword" placeholder="Masukan Password">
+                                            <input type="password" name="password"
+                                                class="form-control form-control-user" id="exampleInputPassword"
+                                                placeholder="Masukan Password">
                                         </div>
                                         {{-- <div class="form-group">
                                             <div class="custom-control custom-checkbox small">
