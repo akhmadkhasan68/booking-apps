@@ -2,7 +2,7 @@
 
     <!-- Sidebar - Brand -->
     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-        <img src="{{ asset('img/logo.png') }}" class="img-fluid rounded-start" alt="...">
+        <img src="{{ asset('img/Group 1.svg') }}" class="img-fluid rounded-start" alt="...">
     </a>
 
     <!-- Divider -->
@@ -20,7 +20,7 @@
 
     <!-- Heading -->
     <div class="sidebar-heading">
-        Interface
+        Main Menu
     </div>
 
     <!-- Nav Item - Pages Collapse Menu -->
@@ -29,7 +29,7 @@
             <i class="fas fa-fw fa-cog"></i>
             <span>User Management</span>
         </a>
-       
+
     </li>
 
     <!-- Nav Item - Utilities Collapse Menu -->
@@ -38,21 +38,21 @@
             <i class="fas fa-fw fa-wrench"></i>
             <span>Room</span>
         </a>
-    
+
     </li>
     <li class="nav-item">
         <a class="nav-link collapsed" href="{{ URL::to('admin/booking') }}" >
             <i class="fas fa-fw fa-wrench"></i>
             <span>Booking</span>
         </a>
-    
+
     </li>
     <!-- Divider -->
     <hr class="sidebar-divider">
 
     <!-- Heading -->
     <div class="sidebar-heading">
-        Addons
+        Report
     </div>
 
     <!-- Nav Item - Pages Collapse Menu -->
@@ -67,7 +67,7 @@
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">
 
- 
 
- 
+
+
 </ul>

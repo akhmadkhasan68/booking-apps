@@ -9,7 +9,10 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Login</title>
+    <title>SIMARU - Login</title>
+  <!-- Favicons -->
+  <link rel="icon" type="image/png" sizes="16x16" href="{{asset('img/Logo_Kominfo_Jatim.png')}}" style="height: max-content" />
+  <link rel="apple-touch-icon" type="image/png" sizes="16x16" href="{{asset('img/Logo_Kominfo_Jatim.png')}}" />
 
     <!-- Custom fonts for this template-->
     <link href="sbadmin2/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -35,30 +38,35 @@
                     <div class="card-body p-0">
                         <!-- Nested Row within Card Body -->
                         <div class="row">
-                            <div class="col-lg-6 d-none d-lg-block" src="img/krte.jpg"></div>
+                            <div class="col-lg-6 d-none d-lg-block my-auto">
+                                <div class="text-center ">
+                                    <img src="{{ asset('img/Logo_Kominfo_Jatim.png') }}" alt="Your Image" style="width: 300px" height="300px">
+                                </div>
+                            </div>
                             <div class="col-lg-6">
                                 <div class="p-5">
                                     <div class="text-center">
-                                        <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
+                                        <h1 class="h4 text-gray-900 mb-4">Login Admin SIMARU</h1>
+                                        <p>Sistem Informasi Pemesanan Ruangan</p>
                                     </div>
                                     <form action="admin/authlogin" method="POST" class="user">
                                         @csrf
                                         <div class="form-group">
                                             <input type="email" name="email" class="form-control form-control-user"
                                                 id="exampleInputEmail" aria-describedby="emailHelp"
-                                                placeholder="Enter Email Address...">
+                                                placeholder="Masukan Email">
                                         </div>
                                         <div class="form-group">
                                             <input type="password" name="password" class="form-control form-control-user"
-                                                id="exampleInputPassword" placeholder="Password">
+                                                id="exampleInputPassword" placeholder="Masukan Password">
                                         </div>
-                                        <div class="form-group">
+                                        {{-- <div class="form-group">
                                             <div class="custom-control custom-checkbox small">
                                                 <input type="checkbox" class="custom-control-input" id="customCheck">
                                                 <label class="custom-control-label" for="customCheck">Remember
                                                     Me</label>
                                             </div>
-                                        </div>
+                                        </div> --}}
                                         <button type="submit" class="btn btn-primary btn-user btn-block">
                                             Login
                                         </button>
@@ -71,12 +79,12 @@
                                         </a> --}}
                                     </form>
                                     <hr>
-                                    <div class="text-center">
+                                    {{-- <div class="text-center">
                                         <a class="small" href="forgot-password.html">Forgot Password?</a>
                                     </div>
                                     <div class="text-center">
                                         <a class="small" href="register.html">Create an Account!</a>
-                                    </div>
+                                    </div> --}}
                                 </div>
                             </div>
                         </div>
