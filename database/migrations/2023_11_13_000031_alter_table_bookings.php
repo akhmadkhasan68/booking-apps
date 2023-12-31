@@ -14,11 +14,12 @@ class AlterTableBookings extends Migration
      */
     public function up()
     {
-        Schema::table('bookings', function(Blueprint $table) {
+        Schema::table('bookings', function (Blueprint $table) {
             $table->integer('room_id')->nullable()->change();
             $table->enum('division_type', [
                 DivisionTypeEnum::INTERNAL->value,
-                DivisionTypeEnum::EXTERNAL->value
+                DivisionTypeEnum::EXTERNAL->value,
+                DivisionTypeEnum::GABUNGAN->value,
             ]);
         });
     }
@@ -30,7 +31,7 @@ class AlterTableBookings extends Migration
      */
     public function down()
     {
-        Schema::table('bookings', function(Blueprint $table) {
+        Schema::table('bookings', function (Blueprint $table) {
             $table->integer('room_id')->change();
             $table->dropColumn('division_type');
         });

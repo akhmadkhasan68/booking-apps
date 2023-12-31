@@ -30,19 +30,20 @@ class BookingRequest extends FormRequest
             'division_id' => [
                 'nullable',
                 'numeric',
-                Rule::exists('divisions', 'id')
+                Rule::exists('divisions', 'id'),
             ],
             'participant_type' => [
                 'required',
                 Rule::in([
                     DivisionTypeEnum::INTERNAL->value,
-                    DivisionTypeEnum::EXTERNAL->value
-                ])
+                    DivisionTypeEnum::EXTERNAL->value,
+                    DivisionTypeEnum::GABUNGAN->value,
+                ]),
             ],
             'room_id' => [
                 'required',
                 'numeric',
-                Rule::exists('rooms', 'id')
+                Rule::exists('rooms', 'id'),
             ],
             'nip' => 'required',
             'phone' => 'required',
@@ -50,7 +51,7 @@ class BookingRequest extends FormRequest
             'end_date' => 'required|date_format:Y-m-d H:i:s|after_or_equal:' . $this->start_date,
             'participant' => 'required|numeric',
             'description' => 'required',
-            'attachment' => 'required|file|mimes:jpg,png,jpeg,pdf,doc,docx,xls,xlsx,ppt,pptx|max:2048'
+            'attachment' => 'required|file|mimes:jpg,png,jpeg,pdf,doc,docx,xls,xlsx,ppt,pptx|max:2048',
         ];
     }
 }

@@ -14,7 +14,7 @@ class AlterBookingsTable extends Migration
      */
     public function up()
     {
-        Schema::table('bookings', function(Blueprint $table) {
+        Schema::table('bookings', function (Blueprint $table) {
             $table->dropColumn(['division_type']);
         });
     }
@@ -26,10 +26,11 @@ class AlterBookingsTable extends Migration
      */
     public function down()
     {
-        Schema::table('bookings', function(Blueprint $table) {
+        Schema::table('bookings', function (Blueprint $table) {
             $table->enum('division_type', [
                 DivisionTypeEnum::INTERNAL->value,
-                DivisionTypeEnum::EXTERNAL->value
+                DivisionTypeEnum::EXTERNAL->value,
+                DivisionTypeEnum::GABUNGAN->value,
             ]);
         });
     }
