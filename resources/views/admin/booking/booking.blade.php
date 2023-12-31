@@ -1,6 +1,6 @@
 @extends('admin.admin')
 @section('title')
-    
+
 @endsection
 @section('content')
 <div class="card card-primary">
@@ -17,13 +17,13 @@
                     <th>Tanggal Mulai</th>
                     <th>Tanggal Selesai</th>
                     <th>Status</th>
-                    <th>Aksi</th> 
+                    <th>Aksi</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach ($datas as $index)
                 <tr>
-                    
+
                     <td>{{ $index->member->name }}</td>
                     <td>{{ $index->phone }}</td>
                     <td>{{ $index->room->name }}</</td>
@@ -38,6 +38,8 @@
 
             </tbody>
         </table>
+        {{ $datas->links() }}
+
     </div>
 </div>
 @endsection

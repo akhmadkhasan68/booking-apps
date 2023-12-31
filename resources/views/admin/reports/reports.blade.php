@@ -1,6 +1,6 @@
 @extends('admin.admin')
 @section('title')
-    
+
 @endsection
 @section('content')
     <div class="card card-primary">
@@ -30,6 +30,7 @@
                     @endforeach
                 </tbody>
             </table>
+            {{ $datas->links() }}
         </div>
     </div>
 @endsection

@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Enums\BookingStatusEnum;
-use Illuminate\Http\Request;
 use App\Models\Booking;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\URL;
 
 class BookingController extends Controller
@@ -16,10 +16,10 @@ class BookingController extends Controller
      */
     public function index()
     {
-        //
-        $datas = Booking::with(['member', 'member.user', 'member.division', 'room'])->get();
+        $datas = Booking::with(['member', 'member.user', 'member.division', 'room'])
+            ->orderBy('created_at', 'desc')
+            ->simplePaginate(10); // specify the number of items per page
 
-        // dd(Booking::all());
         return view('admin.booking.booking', compact('datas'));
     }
 
@@ -56,42 +56,44 @@ class BookingController extends Controller
             $data = Booking::with(['member', 'member.user', 'member.division', 'room'])->findOrFail($id);
 
             return view('admin.booking.detail', compact('data'));
-        } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             abort(404);
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
             abort(500, $e->getMessage());
         }
     }
 
-    public function approvebooking($id) {
+    public function approvebooking($id)
+    {
         try {
             $data = Booking::findOrFail($id);
             $data->status = BookingStatusEnum::DONE;
             $data->save();
 
             return redirect()->route('booking')->with('success', 'Booking has been approved!');
-        } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             abort(404);
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
             abort(500, $e->getMessage());
         }
     }
 
-    public function approvebookingaction(Request $request) {
+    public function approvebookingaction(Request $request)
+    {
         $this->validate($request, [
-            'attachment'     => 'required',
-            'id'            => 'required'
+            'attachment' => 'required',
+            'id' => 'required',
         ]);
 
         $data = [];
 
         //upload image
-        if($request->hasFile('attachment')) {
+        if ($request->hasFile('attachment')) {
             $attachment = $request->file('attachment');
             $extension = $attachment->getClientOriginalExtension();
-            $fileName = time().rand(0, 100).".".$extension;
-            $attachment->move(public_path('uploads/file'), $fileName); 
-            $url = URL::asset('uploads/file/'.$fileName);
+            $fileName = time() . rand(0, 100) . "." . $extension;
+            $attachment->move(public_path('uploads/file'), $fileName);
+            $url = URL::asset('uploads/file/' . $fileName);
 
             $data['attachment'] = $url;
         }
@@ -102,7 +104,7 @@ class BookingController extends Controller
             $booking->update($data);
 
             return redirect()->route('booking')->with('success', 'Booking has been approved!');
-        } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             abort(404);
         }
     }
@@ -115,9 +117,9 @@ class BookingController extends Controller
             $data->save();
 
             return redirect()->route('booking')->with('success', 'Booking has been canceled!');
-        } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             abort(404);
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
             abort(500, $e->getMessage());
         }
     }

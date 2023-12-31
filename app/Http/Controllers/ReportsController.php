@@ -4,9 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Feedback;
 use Illuminate\Http\Request;
+
 // use App\Models\Feedback;
-
-
 
 class ReportsController extends Controller
 {
@@ -22,8 +21,9 @@ class ReportsController extends Controller
             'member.user',
             'member.division',
             'room',
-            'medias'
-        ])->get();
+            'medias',
+        ])->orderBy('created_at', 'desc') // Change 'created_at' to the actual column you want to use for sorting
+            ->simplePaginate(10); // Set the number of items per page
 
         return view('admin.reports.reports', compact('datas'));
     }
@@ -63,13 +63,13 @@ class ReportsController extends Controller
                 'member.user',
                 'member.division',
                 'room',
-                'medias'
+                'medias',
             ])->findOrFail($id);
 
             return view('admin.reports.detail', compact('data'));
-        } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             abort(404);
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
             abort(500, $e->getMessage());
         }
     }
