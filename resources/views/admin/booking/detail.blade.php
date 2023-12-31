@@ -1,6 +1,6 @@
 @extends('admin.admin')
 @section('title')
-    
+
 @endsection
 @section('content')
 <div class="container">
@@ -13,22 +13,6 @@
                 </div>
 
                 <div class="card-body">
-                    @if($data->status === 'PENDING')
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <form action="{{ route('cancelbooking', $data->id) }}" method="post">
-                                @csrf
-                                <button type="submit" class="btn btn-warning mt-3">Cancel</button>
-                            </form>
-                            <form action="{{ route('approvebooking', $data->id) }}" method="post">
-                                @csrf
-                                <button type="submit" class="btn btn-success mt-3">Approve</button>
-                            </form>
-                            <!-- <a href="{{ route('approvebooking', $data->id) }}" class="btn btn-success mt-3">Approve</a> -->
-                        </div>
-                    </div>
-                    <br>
-                    @endif
                     <table class="table table-bordered table-striped">
                         <tr>
                             <td>Nama</td>
@@ -85,6 +69,24 @@
                             </td>
                         </tr>
                     </table>
+                    @if($data->status === 'PENDING' || $data->status === 'DONE')
+                    <div class="row">
+                        <div class="col-lg-12 text-center">
+                            <form action="{{ route('cancelbooking', $data->id) }}" method="post" class="d-inline">
+                                @csrf
+                                <button type="submit" class="btn btn-danger mt-3">Cancel Pemesanan</button>
+                            </form>
+
+                            @if($data->status === 'PENDING')
+                                <!-- Tombol Approve hanya ditampilkan jika status PENDING -->
+                                <form action="{{ route('approvebooking', $data->id) }}" method="post" class="d-inline">
+                                    @csrf
+                                    <button type="submit" class="btn btn-success mt-3">Approve Pemesanan</button>
+                                </form>
+                            @endif
+                        </div>
+                    </div>
+                @endif
                 </div>
             </div>
         </div>

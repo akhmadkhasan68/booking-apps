@@ -16,15 +16,26 @@ class UserManagementController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    // public function index(Request $request)
+    // {
+    //     //
+    //     // $datas = User::all();
+    //     // return response()->json($datas);
+    //     // $datas = User::all();
+    //     $datas = User::selectRaw('*, users.id as id, divisions.name as division_name, users.name as name, members.gender as member_gender, members.address as member_address, members.nip as member_nip, members.nip as member_nip ')->leftjoin('members', 'members.user_id', '=', 'users.id')
+    //         ->leftjoin('divisions', 'members.division_id', '=', 'divisions.id')->where('roles', 'MEMBER')->get();
+    //     // dd($datas);
+
+    //     return view('admin.usermanagement.usermanagement', compact('datas'));
+    // }
     public function index(Request $request)
     {
-        //
-        // $datas = User::all();
-        // return response()->json($datas);
-        // $datas = User::all();
-        $datas = User::selectRaw('*, users.id as id, divisions.name as division_name, users.name as name, members.gender as member_gender, members.address as member_address, members.nip as member_nip, members.nip as member_nip ')->leftjoin('members', 'members.user_id', '=', 'users.id')
-            ->leftjoin('divisions', 'members.division_id', '=', 'divisions.id')->where('roles', 'MEMBER')->get();
-        // dd($datas);
+        $datas = User::selectRaw('*, users.id as id, divisions.name as division_name, users.name as name, members.gender as member_gender, members.address as member_address, members.nip as member_nip, members.nip as member_nip ')
+            ->leftJoin('members', 'members.user_id', '=', 'users.id')
+            ->leftJoin('divisions', 'members.division_id', '=', 'divisions.id')
+            ->where('roles', 'MEMBER')
+            ->orderBy('users.id', 'desc') // Change 'users.id' to the actual column you want to use for sorting
+            ->simplePaginate(10); // Set the number of items per page
 
         return view('admin.usermanagement.usermanagement', compact('datas'));
     }

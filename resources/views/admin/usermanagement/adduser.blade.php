@@ -65,9 +65,18 @@
                                 <div class="col-md-5">
                                     <select class="form-control col-md-10" name="roles">
                                         <option selected>------ Role ------</option>
+                                        @php
+                                            $optionsAdded = 0;
+                                        @endphp
                                         @foreach ($users as $user)
-                                        <option value="{{ $user->roles}}">{{ $user->roles }}</option>
-                                    @endforeach
+                                            {{-- Hanya tampilkan opsi "admin" dan "member" --}}
+                                            @if(in_array($user->roles, ['ADMIN', 'MEMBER']) && $optionsAdded < 2)
+                                                <option value="{{ $user->roles }}">{{ $user->roles }}</option>
+                                                @php
+                                                    $optionsAdded++;
+                                                @endphp
+                                            @endif
+                                        @endforeach
                                     </select>
                                 </div>
 
@@ -78,7 +87,6 @@
                                 @enderror
                             </div>
                         </div>
-
                         <div class="form-group row">
                             <label for="name" class="col-md-4 col-form-label text-md-right">Masukan Divisi</label>
 
