@@ -19,7 +19,8 @@ class AlterTableBooking extends Migration
             $table->string('nip');
             $table->string('phone');
             $table->text('description');
-            $table->integer('participant');
+            $table->integer('participant_internal');
+            $table->integer('participant_external');
             $table->integer('division_id');
         });
     }
@@ -38,7 +39,8 @@ class AlterTableBooking extends Migration
                 'nip',
                 'phone',
                 'description',
-                'participant',
+                'participant_internal',
+                'participant_external',
                 'division_id'
             ]);
         });

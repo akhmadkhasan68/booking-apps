@@ -47,8 +47,12 @@
                             <td>{{ $data->booking_end_date }}</td>
                         </tr>
                         <tr>
-                            <td>Jumlah Partisipan</td>
-                            <td>{{ $data->participant }}</td>
+                            <td>Jumlah Partisipan Internal</td>
+                            <td>{{ $data->participant_internal }}</td>
+                        </tr>
+                        <tr>
+                            <td>Jumlah Partisipan External</td>
+                            <td>{{ $data->participant_external }}</td>
                         </tr>
                         <tr>
                             <td>Deskripsi</td>

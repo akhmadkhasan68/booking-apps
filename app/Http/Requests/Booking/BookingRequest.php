@@ -49,7 +49,8 @@ class BookingRequest extends FormRequest
             'phone' => 'required',
             'start_date' => 'required|date_format:Y-m-d H:i:s|after_or_equal:' . date(DATE_ATOM),
             'end_date' => 'required|date_format:Y-m-d H:i:s|after_or_equal:' . $this->start_date,
-            'participant' => 'required|numeric',
+            'participant_internal' => 'required|numeric',
+            'participant_external' => 'required|numeric',
             'description' => 'required',
             'attachment' => 'required|file|mimes:jpg,png,jpeg,pdf,doc,docx,xls,xlsx,ppt,pptx|max:2048',
         ];
