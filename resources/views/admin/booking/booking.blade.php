@@ -11,8 +11,8 @@
         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
             <thead class="btn-primary">
                 <tr>
+                    <th>User</th>
                     <th>Nama</th>
-                    <th>Nomor Telepon</th>
                     <th>Ruangan</th>
                     <th>Tanggal Mulai</th>
                     <th>Tanggal Selesai</th>
@@ -25,7 +25,7 @@
                 <tr>
 
                     <td>{{ $index->member->name }}</td>
-                    <td>{{ $index->phone }}</td>
+                    <td>{{ $index->name }}</td>
                     <td>{{ $index->room->name }}</</td>
                     <td>{{ $index->booking_start_date }}</</td>
                     <td>{{ $index->booking_end_date }}</</td>

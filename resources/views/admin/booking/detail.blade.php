@@ -15,8 +15,12 @@
                 <div class="card-body">
                     <table class="table table-bordered table-striped">
                         <tr>
-                            <td>Nama</td>
+                            <td>User</td>
                             <td>{{ $data->member->name }}</td>
+                        </tr>
+                        <tr>
+                            <td>Nama Pemesan</td>
+                            <td>{{ $data->name }}</td>
                         </tr>
                         <tr>
                             <td>NIP</td>
