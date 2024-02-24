@@ -42,6 +42,7 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
         Route::get('/schedules', [RoomController::class, 'schedules']);
         Route::get('/schedules/{id}', [RoomController::class, 'scheduleDetail']);
         Route::post('/search-available', [RoomController::class, 'searchAvailable']);
+        Route::post('/search-unavailable', [RoomController::class, 'searchUnvailable']);
         Route::get('/{id}', [RoomController::class, 'detail']);
     });
     

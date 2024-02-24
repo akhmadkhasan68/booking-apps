@@ -45,10 +45,6 @@ class FeedbackRepository {
 
     public function create(FeedbackRequest $request) {
         try {
-            if(!$request->hasfile('medias')) {
-                throw new Exception("Medias not found!", 400);
-            }
-
             DB::beginTransaction();
 
             $feedbackData = Feedback::create([
@@ -58,18 +54,21 @@ class FeedbackRepository {
             ]);
 
             $data = [];
-            foreach($request->file('medias') as $key => $media)
-            {
-                $extension = $media->getClientOriginalExtension();
-                $fileName = time().rand(0, 100).".".$extension;
-                $media->move(public_path('uploads/images'), $fileName); 
-                $url = URL::asset('uploads/images/'.$fileName);
+            // check if request medias is not empty
+            if($request->hasfile('medias') && $request->file('medias') != null) {
+                foreach($request->file('medias') as $key => $media)
+                {
+                    $extension = $media->getClientOriginalExtension();
+                    $fileName = time().rand(0, 100).".".$extension;
+                    $media->move(public_path('uploads/images'), $fileName); 
+                    $url = URL::asset('uploads/images/'.$fileName);
 
-                $data[$key]['feedback_id'] = $feedbackData->id;
-                $data[$key]['attachment'] = $url;
+                    $data[$key]['feedback_id'] = $feedbackData->id;
+                    $data[$key]['attachment'] = $url;
+                }
+
+                FeedbackMedia::insert($data);
             }
-
-            FeedbackMedia::insert($data);
 
             DB::commit();
 

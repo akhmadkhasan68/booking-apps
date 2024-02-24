@@ -1,8 +1,8 @@
 <?php
 namespace App\Enums;
 
-enum DivisionTypeEnum: string {
-    case INTERNAL = "INTERNAL";
-    case EXTERNAL = "EXTERNAL";
-    case GABUNGAN = "INTERNAL & EXTERNAL";
+class DivisionTypeEnum {
+    const INTERNAL = "INTERNAL";
+    const EXTERNAL = "EXTERNAL";
+    const GABUNGAN = "INTERNAL & EXTERNAL";
 }

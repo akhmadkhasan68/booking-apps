@@ -4,6 +4,7 @@ namespace App\Http\Repositories;
 use App\Enums\BookingStatusEnum;
 use App\Http\Requests\PaginateRequest;
 use App\Http\Requests\Room\SearchAvailableRequest;
+use App\Http\Requests\Room\SearchUnavailableRequest;
 use App\Models\Room;
 use App\Traits\PaginateTrait;
 use Carbon\Carbon;
@@ -39,6 +40,20 @@ class RoomRepository {
       $endDate = $request->end_date;
 
       return $this->getAvailableRoom($startDate, $endDate);
+    } catch (\Exception $e) {
+      throw $e;
+    }
+  }
+  
+  public function searchUnvailable(SearchUnavailableRequest $request) {
+    try {
+      $search = $request->search ?? null;
+
+      // last 7 days util now
+      $startDate = Carbon::now()->subDays(7)->startOfDay();
+      $endDate = Carbon::now()->endOfDay();
+
+      return $this->getUnavailableRoom($search, $startDate, $endDate);
     } catch (\Exception $e) {
       throw $e;
     }
@@ -90,8 +105,25 @@ class RoomRepository {
         return $q->where(function($sub) use($startDate, $endDate) {
           return $sub->whereBetween('booking_start_date', [$startDate, $endDate])
           ->orWhereBetween('booking_end_date', [$startDate, $endDate]);
-        })->where('status', '!=', BookingStatusEnum::CANCELED->value);
+        })->where('status', '!=', BookingStatusEnum::CANCELED);
       })->get();
+    } catch (\Exception $e) {
+      throw $e;
+    }
+  }
+  
+  public function getUnavailableRoom($search = null, $startDate, $endDate) {
+    try {
+      return $this->roomModel->with(['feedbacks', 'room_facilities', 'room_facilities.facility', 'bookings', 'bookings.member'])
+        ->whereHas('bookings', function($q) use($search, $startDate, $endDate) {
+          return $q->where('description', 'like', "%$search%")
+          ->whereBetween('booking_start_date', [$startDate, $endDate])
+          ->orWhereBetween('booking_end_date', [$startDate, $endDate]);
+      })
+      ->when($search, function($q) use($search) {
+        return $q->where('name', 'like', "%$search%");
+      })
+      ->get();
     } catch (\Exception $e) {
       throw $e;
     }

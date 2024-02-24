@@ -35,9 +35,9 @@ class BookingRequest extends FormRequest
             'participant_type' => [
                 'required',
                 Rule::in([
-                    DivisionTypeEnum::INTERNAL->value,
-                    DivisionTypeEnum::EXTERNAL->value,
-                    DivisionTypeEnum::GABUNGAN->value,
+                    DivisionTypeEnum::INTERNAL,
+                    DivisionTypeEnum::EXTERNAL,
+                    DivisionTypeEnum::GABUNGAN,
                 ]),
             ],
             'room_id' => [

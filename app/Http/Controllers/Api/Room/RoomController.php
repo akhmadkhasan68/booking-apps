@@ -8,6 +8,7 @@ use App\Http\Repositories\RoomRepository;
 use App\Http\Requests\PaginateRequest;
 use App\Http\Requests\Room\BookingRequest;
 use App\Http\Requests\Room\SearchAvailableRequest;
+use App\Http\Requests\Room\SearchUnavailableRequest;
 
 class RoomController extends Controller
 {
@@ -43,6 +44,16 @@ class RoomController extends Controller
             $data = $this->roomRepository->searchAvailable($request);
 
             return ApiResponseHelper::successResponse("Success search data room available", $data);
+        } catch (\Exception $e) {
+            return ApiResponseHelper::errorResponse($e->getMessage(), $e->getCode());
+        }
+    }
+
+    public function searchUnvailable(SearchUnavailableRequest $request) {
+        try {
+            $data = $this->roomRepository->searchUnvailable($request);
+
+            return ApiResponseHelper::successResponse("Success search data room unvailable", $data);
         } catch (\Exception $e) {
             return ApiResponseHelper::errorResponse($e->getMessage(), $e->getCode());
         }

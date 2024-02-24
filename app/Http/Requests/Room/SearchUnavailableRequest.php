@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Feedback;
+namespace App\Http\Requests\Room;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class FeedbackRequest extends FormRequest
+class SearchUnavailableRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,14 +24,7 @@ class FeedbackRequest extends FormRequest
     public function rules()
     {
         return [
-            'room_id' => [
-                'required',
-                'numeric',
-                Rule::exists('rooms', 'id')
-            ],
-            'description' => 'required',
-            'medias' => 'nullable',
-            'medias.*' => 'nullable|mimes:jpg,png,jpeg|max:2048'
+            'search' => 'nullable|string|min:3|max:255'
         ];
     }
 }

@@ -28,9 +28,9 @@ class AlterBookingsTable extends Migration
     {
         Schema::table('bookings', function (Blueprint $table) {
             $table->enum('division_type', [
-                DivisionTypeEnum::INTERNAL->value,
-                DivisionTypeEnum::EXTERNAL->value,
-                DivisionTypeEnum::GABUNGAN->value,
+                DivisionTypeEnum::INTERNAL,
+                DivisionTypeEnum::EXTERNAL,
+                DivisionTypeEnum::GABUNGAN,
             ]);
         });
     }
